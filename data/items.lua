@@ -118,13 +118,15 @@ return {
     },
 
     ['bandage'] = {
-        label = 'Bandage',
+        grid = { 1, 1 },
+        label = 'Bandagem',
         rarity = 'common',
         weight = 115,
     },
 
     ['burger'] = {
-        label = 'Burger',
+        grid = { 1, 1 },
+        label = 'Hambúrguer',
         rarity = 'common',
         weight = 220,
         client = {
@@ -443,6 +445,7 @@ return {
     },
 
     ['sprunk'] = {
+        grid = { 1, 1 },
         label = 'Sprunk',
         rarity = 'common',
         weight = 350,
@@ -872,13 +875,14 @@ return {
     },
 
     ['lockpick'] = {
-        label = 'Lockpick',
+        grid = { 1, 1 },
+        label = 'Chave Micha',
         rarity = 'common',
         weight = 160,
     },
 
     ['phone'] = {
-        label = 'Phone',
+        label = 'Celular',
         rarity = 'uncommon',
         grid = { 1, 2 },
         weight = 190,
@@ -1147,7 +1151,8 @@ return {
     },
 
     ['water'] = {
-        label = 'Water',
+        grid = { 1, 1 },
+        label = 'Água',
         rarity = 'common',
         weight = 500,
         client = {
@@ -1161,7 +1166,7 @@ return {
     },
 
     ['armour'] = {
-        label = 'Bulletproof Vest',
+        label = 'Colete Balístico',
         rarity = 'rare',
         grid = { 2, 2 },
         clothing = 'armour',
@@ -1180,7 +1185,8 @@ return {
     },
 
     ['money'] = {
-        label = 'Money',
+        grid = { 1, 1 },
+        label = 'Dinheiro',
         rarity = 'common',
     },
 
@@ -1190,7 +1196,8 @@ return {
     },
 
     ['id_card'] = {
-        label = 'Identification Card',
+        grid = { 1, 1 },
+        label = 'Identidade',
         rarity = 'common',
     },
 
@@ -1564,12 +1571,14 @@ return {
 	},
 
     ['driver_license'] = {
-        label = 'Drivers License',
+        grid = { 1, 1 },
+        label = 'Carteira de Motorista',
         rarity = 'common',
     },
 
     ['weaponlicense'] = {
-        label = 'Weapon License',
+        grid = { 1, 1 },
+        label = 'Porte de Arma',
         rarity = 'uncommon',
     },
 
@@ -1843,7 +1852,7 @@ return {
     
 
     ['radio'] = {
-        label = 'Radio',
+        label = 'Rádio',
         rarity = 'uncommon',
         grid = { 1, 2 },
         weight = 1000,
@@ -1895,13 +1904,14 @@ return {
     },
 
     ['cleaningkit'] = {
-        label = 'Cleaning Kit',
+        grid = { 1, 1 },
+        label = 'Kit de Limpeza',
         rarity = 'common',
         weight = 500,
     },
 
     ['repairkit'] = {
-        label = 'Repair Kit',
+        label = 'Kit de Reparo',
         rarity = 'uncommon',
         grid = { 2, 1 },
         weight = 2500,
@@ -2128,14 +2138,15 @@ return {
     },
 
     ['firstaid'] = {
-        label = 'First Aid',
+        label = 'Kit de Primeiros Socorros',
         rarity = 'uncommon',
         grid = { 2, 1 },
         weight = 2500,
     },
 
     ['ifaks'] = {
-        label = 'Individual First Aid Kit',
+        grid = { 1, 1 },
+        label = 'Kit Médico Avançado',
         rarity = 'uncommon',
         weight = 2500,
     },
@@ -2554,7 +2565,8 @@ return {
     },
 
     ['coffee'] = {
-        label = 'Coffee',
+        grid = { 1, 1 },
+        label = 'Café',
         rarity = 'common',
         weight = 200,
     },
@@ -2580,7 +2592,8 @@ return {
     },
 
     ['sandwich'] = {
-        label = 'beer',
+        grid = { 1, 1 },
+        label = 'Sanduíche',
         rarity = 'common',
         weight = 200,
     },
@@ -2673,7 +2686,7 @@ return {
     },
 
     ['handcuffs'] = {
-        label = 'Handcuffs',
+        label = 'Algemas',
         rarity = 'uncommon',
         grid = { 2, 1 },
         weight = 200,
@@ -2963,7 +2976,7 @@ return {
     },
 
     ['backpack_small'] = {
-        label = 'Small Backpack',
+        label = 'Mochila Pequena',
         rarity = 'common',
         grid = { 2, 2 },
         clothing = 'backpack',
@@ -2999,7 +3012,7 @@ return {
     },
 
     ['backpack_medium'] = {
-        label = 'Backpack',
+        label = 'Mochila Média',
         rarity = 'uncommon',
         grid = { 2, 2 },
         clothing = 'backpack',
@@ -3023,7 +3036,7 @@ return {
     },
 
     ['backpack_large'] = {
-        label = 'Large Backpack',
+        label = 'Mochila Grande',
         rarity = 'rare',
         grid = { 2, 3 },
         clothing = 'backpack',
@@ -3047,7 +3060,7 @@ return {
     },
 
     ['duffel_bag'] = {
-        label = 'Duffel Bag',
+        label = 'Bolsa de Viagem',
         rarity = 'epic',
         grid = { 3, 2 },
         clothing = 'backpack',
