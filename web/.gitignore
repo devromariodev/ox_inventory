@@ -9,7 +9,8 @@
 /coverage
 
 # production
-/build
+# /build  ← NewCity: versionamos o web/build compilado (fork usado por git: no
+#          versions.lock, sem passo de build no deploy — igual ao nc_ui).
 
 # misc
 .DS_Store
