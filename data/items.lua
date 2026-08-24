@@ -2964,7 +2964,7 @@ return {
     },
 
     ['backpack_fashion'] = {
-        label = 'Mini Backpack',
+        label = 'Mochila Básica',
         rarity = 'common',
         grid = { 2, 2 },
         clothing = 'backpack',
@@ -2988,8 +2988,8 @@ return {
     },
 
     ['backpack_urban'] = {
-        label = 'Street Backpack',
-        rarity = 'uncommon',
+        label = 'Mochila Urbana',
+        rarity = 'common',
         grid = { 2, 2 },
         clothing = 'backpack',
         weight = 1100,
@@ -3000,7 +3000,7 @@ return {
     },
 
     ['backpack_gamer'] = {
-        label = 'Tech Backpack',
+        label = 'Mochila Gamer',
         rarity = 'uncommon',
         grid = { 2, 2 },
         clothing = 'backpack',
@@ -3013,7 +3013,7 @@ return {
 
     ['backpack_medium'] = {
         label = 'Mochila Média',
-        rarity = 'uncommon',
+        rarity = 'common',
         grid = { 2, 2 },
         clothing = 'backpack',
         weight = 1400,
@@ -3024,7 +3024,7 @@ return {
     },
 
     ['backpack_hiking'] = {
-        label = 'Trail Backpack',
+        label = 'Mochila de Trilha',
         rarity = 'rare',
         grid = { 2, 3 },
         clothing = 'backpack',
@@ -3048,7 +3048,7 @@ return {
     },
 
     ['duffel_bag_sport'] = {
-        label = 'Sports Duffel',
+        label = 'Bolsa Esportiva',
         rarity = 'epic',
         grid = { 3, 2 },
         clothing = 'backpack',
@@ -3072,7 +3072,7 @@ return {
     },
 
     ['briefcase'] = {
-        label = 'Briefcase',
+        label = 'Maleta',
         rarity = 'rare',
         grid = { 2, 2 },
         weight = 1500,
@@ -3083,7 +3083,7 @@ return {
     },
 
     ['medic_bag'] = {
-        label = 'Medical Bag',
+        label = 'Bolsa Médica',
         rarity = 'rare',
         grid = { 3, 2 },
         weight = 2500,
