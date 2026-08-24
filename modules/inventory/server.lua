@@ -493,6 +493,66 @@ local function rebindAfterSwap(fromInventory, toInventory, data, action, vacated
 end
 
 ---@param inv OxInventory
+-- NewCity B2: revalida os slots na GRADE apos carregar do banco. O Inventory.Load
+-- grava cada item no slot salvo SEM checar footprint/bounds; se a config mudou
+-- (colunas/rows) ou virou slots->grid (nosso caminho de adocao), os footprints
+-- colidem/saem dos limites. Reconstroi item a item: mantem o slot salvo se ainda
+-- cabe, senao realoca pro 1o lugar livre DENTRO da grade (nunca na faixa de
+-- equipamento). No-op fora de grade. Complementa o reclaimStrandedSlots (que so
+-- cuida de player + slots fora do total, nao de colisao dentro dos limites).
+local function revalidateGridSlots(inv)
+	if not Grid.isGridLayout() or type(inv.items) ~= 'table' then return end
+
+	local baseSlots = Grid.getBaseSlots(inv)
+	local layout = Grid.newLayout(baseSlots)
+
+	local slots = {}
+	for slot in pairs(inv.items) do
+		if type(slot) == 'number' and slot >= 1 and slot <= baseSlots then
+			slots[#slots + 1] = slot
+		end
+	end
+	table.sort(slots)
+
+	local relocate, count = {}, 0
+	for i = 1, #slots do
+		local slot = slots[i]
+		local data = inv.items[slot]
+		local item = data and Grid.getItem(data.name)
+		if item then
+			local width, height = Grid.getItemSize(item, data.metadata)
+			if Grid.fits(layout, slot, width, height) then
+				Grid.mark(layout, slot, width, height)
+			else
+				inv.items[slot] = nil
+				count = count + 1
+				relocate[count] = { data = data, width = width, height = height, orig = slot }
+			end
+		end
+	end
+
+	for i = 1, count do
+		local entry = relocate[i]
+		local placed
+		for target = 1, baseSlots do
+			if Grid.fits(layout, target, entry.width, entry.height) then
+				Grid.mark(layout, target, entry.width, entry.height)
+				entry.data.slot = target
+				inv.items[target] = entry.data
+				placed = true
+				break
+			end
+		end
+		if not placed then
+			inv.items[entry.orig] = entry.data
+		end
+	end
+
+	if count > 0 then
+		warn(('%s: revalidacao de grade no load moveu %d item(ns) (B2)'):format(tostring(inv.id), count))
+	end
+end
+
 local function reclaimStrandedSlots(inv)
 	local list = fastSlots(inv)
 
@@ -876,6 +936,8 @@ function Inventory.Create(id, label, invType, slots, weight, maxWeight, owner, i
 	end
 
 	Inventories[self.id] = setmetatable(self, OxInventory)
+
+	revalidateGridSlots(Inventories[self.id]) -- NewCity B2
 
 	if invType == 'player' then
 		reclaimStrandedSlots(Inventories[self.id])

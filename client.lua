@@ -2018,16 +2018,28 @@ RegisterNUICallback('swapItems', function(data, cb)
 			local destination = vec3(coords.x, coords.y, -200)
 			local handle = StartShapeTestLosProbe(coords.x, coords.y, coords.z, destination.x, destination.y, destination.z, 511, cache.ped, 4)
 
+			-- NewCity B1: TODO caminho de saida solta swapActive E chama cb (o return
+			-- cru original vazava os dois -> inventario travava pra sempre). Teto no loop.
+			local attempts = 0
 			while true do
 				Wait(0)
 				local retval, hit, endCoords = GetShapeTestResult(handle)
 
 				if retval ~= 1 then
-					if not hit then return end
+					if not hit then
+						swapActive = false
+						return cb(false)
+					end
 
 					data.coords = vec3(endCoords.x, endCoords.y, endCoords.z + 1.0)
 
 					break
+				end
+
+				attempts = attempts + 1
+				if attempts > 200 then
+					swapActive = false
+					return cb(false)
 				end
 			end
 		else
