@@ -1,7 +1,9 @@
 
 return {
     -- 'slots' | 'grid'
-    layout = 'slots',
+    -- NewCity (ADR-0006): TRAVADO em 'grid' (inventario estilo Tarkov). Nao setar a
+    -- convar inventory:layout no server.cfg — o default daqui manda.
+    layout = 'grid',
 
     dim = {
         enabled = true,
@@ -19,9 +21,12 @@ return {
     },
 
     grid = {
+        -- NewCity: escala media-baixa de partida (ADR-0006). Ajustar nos testes; a
+        -- restruturacao so-mochila (reduzir slots de equipamento + mochila-padrao)
+        -- vem na Fase 3. columns clampa em [5,14]; rows/containerRows livres.
         columns = 10,
-        rows = 8,
-        containerRows = 8,
+        rows = 5,
+        containerRows = 5,
         allowRotate = true,
         defaultSize = { 1, 1 },
         -- fallbacks by item class when an item has no explicit `grid`
