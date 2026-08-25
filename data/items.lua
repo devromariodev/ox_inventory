@@ -1790,6 +1790,7 @@ return {
     },
     
     ["expensive_champagne"] = {
+        client = { status = { thirst = 200000 }, anim = 'drinking', prop = 'champagne', usetime = 2500, cancel = true },
         label = 'Champanhe',
         rarity = 'rare',
         grid = { 1, 2 },
@@ -2546,6 +2547,7 @@ return {
     },
 
     ['wine'] = {
+        client = { status = { thirst = 200000 }, anim = 'drinking', prop = 'wine', usetime = 2500, cancel = true },
         label = 'Vinho',
         rarity = 'uncommon',
         grid = { 1, 2 },
@@ -2559,12 +2561,14 @@ return {
     },
 
     ['grapejuice'] = {
+        client = { status = { thirst = 200000 }, anim = 'drinking', prop = 'juice', usetime = 2500, cancel = true },
         label = 'Suco de Uva',
         rarity = 'common',
         weight = 200,
     },
 
     ['coffee'] = {
+        client = { status = { thirst = 200000 }, anim = 'drinking', prop = 'coffee', usetime = 2500, cancel = true },
         grid = { 1, 1 },
         label = 'Café',
         rarity = 'common',
@@ -2572,6 +2576,7 @@ return {
     },
 
     ['vodka'] = {
+        client = { status = { thirst = 200000 }, anim = 'drinking', prop = 'vodka', usetime = 2500, cancel = true },
         label = 'Vodka',
         rarity = 'common',
         grid = { 1, 2 },
@@ -2579,6 +2584,7 @@ return {
     },
 
     ['whiskey'] = {
+        client = { status = { thirst = 200000 }, anim = 'drinking', prop = 'whiskey', usetime = 2500, cancel = true },
         label = 'Uísque',
         rarity = 'common',
         grid = { 1, 2 },
@@ -2586,12 +2592,14 @@ return {
     },
 
     ['beer'] = {
+        client = { status = { thirst = 200000 }, anim = 'drinking', prop = 'beer', usetime = 2500, cancel = true },
         label = 'Cerveja',
         rarity = 'common',
         weight = 200,
     },
 
     ['sandwich'] = {
+        client = { status = { hunger = 200000 }, anim = 'eating', usetime = 2500, cancel = true },
         grid = { 1, 1 },
         label = 'Sanduíche',
         rarity = 'common',
