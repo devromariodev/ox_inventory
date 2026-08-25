@@ -2599,7 +2599,7 @@ return {
     },
 
     ['sandwich'] = {
-        client = { status = { hunger = 200000 }, anim = 'eating', usetime = 2500, cancel = true },
+        client = { status = { hunger = 200000 }, anim = 'eating', prop = 'burger', usetime = 2500, cancel = true },
         grid = { 1, 1 },
         label = 'Sanduíche',
         rarity = 'common',

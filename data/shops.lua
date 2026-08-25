@@ -42,12 +42,10 @@ return {
 			{ name = 'water', price = 10 },
 			{ name = 'coffee', price = 10 },
 			{ name = 'sprunk', price = 10 },
-			{ name = 'grapejuice', price = 10 },
 			{ name = 'beer', price = 15 },
 			{ name = 'wine', price = 20 },
 			{ name = 'whiskey', price = 20 },
 			{ name = 'vodka', price = 20 },
-			{ name = 'expensive_champagne', price = 20 },
 		}, locations = {
 			vec3(1135.808, -982.281, 46.415),
 			vec3(-1222.915, -906.983, 12.326),
