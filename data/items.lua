@@ -1790,7 +1790,7 @@ return {
     },
     
     ["expensive_champagne"] = {
-        label = "Champagne",
+        label = 'Champanhe',
         rarity = 'rare',
         grid = { 1, 2 },
         weight = 200,
@@ -2546,7 +2546,7 @@ return {
     },
 
     ['wine'] = {
-        label = 'Wine',
+        label = 'Vinho',
         rarity = 'uncommon',
         grid = { 1, 2 },
         weight = 500,
@@ -2559,7 +2559,7 @@ return {
     },
 
     ['grapejuice'] = {
-        label = 'Grape Juice',
+        label = 'Suco de Uva',
         rarity = 'common',
         weight = 200,
     },
@@ -2579,14 +2579,14 @@ return {
     },
 
     ['whiskey'] = {
-        label = 'Whiskey',
+        label = 'Uísque',
         rarity = 'common',
         grid = { 1, 2 },
         weight = 200,
     },
 
     ['beer'] = {
-        label = 'beer',
+        label = 'Cerveja',
         rarity = 'common',
         weight = 200,
     },

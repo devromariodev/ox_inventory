@@ -4,9 +4,11 @@ return {
 		blip = {
 			id = 59, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'burger', price = 10 },
+			{ name = 'burger', price = 15 },
+			{ name = 'sandwich', price = 10 },
 			{ name = 'water', price = 10 },
-			{ name = 'cola', price = 10 },
+			{ name = 'sprunk', price = 10 },
+			{ name = 'coffee', price = 10 },
 		}, locations = {
 			vec3(25.7, -1347.3, 29.49),
 			vec3(-3038.71, 585.9, 7.9),
@@ -38,8 +40,14 @@ return {
 			id = 93, colour = 69, scale = 0.8
 		}, inventory = {
 			{ name = 'water', price = 10 },
-			{ name = 'cola', price = 10 },
-			{ name = 'burger', price = 15 },
+			{ name = 'coffee', price = 10 },
+			{ name = 'sprunk', price = 10 },
+			{ name = 'grapejuice', price = 10 },
+			{ name = 'beer', price = 15 },
+			{ name = 'wine', price = 20 },
+			{ name = 'whiskey', price = 20 },
+			{ name = 'vodka', price = 20 },
+			{ name = 'expensive_champagne', price = 20 },
 		}, locations = {
 			vec3(1135.808, -982.281, 46.415),
 			vec3(-1222.915, -906.983, 12.326),
@@ -73,7 +81,7 @@ return {
 	},
 
 	Ammunation = {
-		name = 'Armaria',
+		name = 'Ammu-Nation',
 		blip = {
 			id = 110, colour = 69, scale = 0.8
 		}, inventory = {
