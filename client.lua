@@ -1,5 +1,7 @@
 if not lib then return end
 
+require 'modules.nc_notify.client' -- NewCity: reroteia lib.notify do ox_inventory pro nc_ui (item A)
+
 require 'modules.bridge.client'
 require 'modules.interface.client'
 

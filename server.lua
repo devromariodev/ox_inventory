@@ -921,23 +921,23 @@ lib.callback.register('ox_inventory:useItem', function(source, itemName, slot, m
 
 				if ostime > durability then
                     Items.UpdateDurability(inventory, data, item, 0)
-					return TriggerClientEvent('ox_lib:notify', source, { type = 'error', description = locale('no_durability', label) })
+					exports.nc_ui:Notify(source, 'error', locale('no_durability', label)); return
 				elseif consume ~= 0 and consume < 1 then
 					local degrade = (data.metadata.degrade or item.degrade) * 60
 					local percentage = ((durability - ostime) * 100) / degrade
 
 					if percentage < consume * 100 then
-						return TriggerClientEvent('ox_lib:notify', source, { type = 'error', description = locale('not_enough_durability', label) })
+						exports.nc_ui:Notify(source, 'error', locale('not_enough_durability', label)); return
 					end
 				end
 			elseif durability <= 0 then
-				return TriggerClientEvent('ox_lib:notify', source, { type = 'error', description = locale('no_durability', label) })
+				exports.nc_ui:Notify(source, 'error', locale('no_durability', label)); return
 			elseif consume ~= 0 and consume < 1 and durability < consume * 100 then
-				return TriggerClientEvent('ox_lib:notify', source, { type = 'error', description = locale('not_enough_durability', label) })
+				exports.nc_ui:Notify(source, 'error', locale('not_enough_durability', label)); return
 			end
 
 			if data.count > 1 and consume < 1 and consume > 0 and not Inventory.GetEmptySlot(inventory, item) then
-				return TriggerClientEvent('ox_lib:notify', source, { type = 'error', description = locale('cannot_use', label) })
+				exports.nc_ui:Notify(source, 'error', locale('cannot_use', label)); return
 			end
 		end
 
@@ -965,7 +965,7 @@ lib.callback.register('ox_inventory:useItem', function(source, itemName, slot, m
 						data.server = result
 					end
 				else
-					return TriggerClientEvent('ox_lib:notify', source, { type = 'error', description = locale('item_not_enough', item.name) })
+					exports.nc_ui:Notify(source, 'error', locale('item_not_enough', item.name)); return
 				end
 			elseif not item.weapon and server.UseItem then
                 inventory.usingItem = data
