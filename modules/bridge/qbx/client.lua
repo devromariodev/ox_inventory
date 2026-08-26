@@ -18,6 +18,11 @@ end)
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function client.setPlayerStatus(values)
+    -- NEWCITY: com o nc_survival no ar, comer/beber é aplicado no SERVIDOR (evento
+    -- ox_inventory:usedItem -> nc_survival). Escrever aqui no statebag do CLIENTE era
+    -- a causa do "comeu, subiu e reverteu" (o servidor nunca ficava sabendo).
+    if GetResourceState('nc_survival') == 'started' then return end
+
     local playerState = LocalPlayer.state
     for name, value in pairs(values) do
         -- compatibility for ESX style values

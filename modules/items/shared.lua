@@ -261,6 +261,9 @@ local function newItem(data)
 	if isServer then
         ---@cast data OxServerItem
         serverData = data.server
+		-- NEWCITY: preserva o efeito de consumo (status) no server — o nc_survival
+		-- aplica comer/beber SERVER-side lendo daqui (fonte única = o próprio item).
+		data.status = clientData and clientData.status or nil
 		data.client = nil
 
 		if not data.durability then
