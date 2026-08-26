@@ -128,6 +128,19 @@ local function loadInventoryData(data, player, ignoreSecurityChecks)
 			data.id = ('%s%s'):format(data.id:sub(1, 5), plate)
 		end
 
+		-- NEWCITY (VEH-06): porta-malas respeita a CHAVE do nc_vehicles. A decisão (e o
+		-- aviso ao jogador, quando nega) é do nc_vehicles — retornar false aqui deixa o
+		-- cliente mudo (sem a notif genérica), então sai UMA notificação só, a nossa.
+		-- ignoreSecurityChecks (abertura forçada/admin) pula o gate, igual às demais
+		-- checagens desta função. Porta-luvas fica fora por ora (decisão pendente do dono).
+		if data.type == 'trunk' and source and not ignoreSecurityChecks
+			and GetResourceState('nc_vehicles') == 'started' then
+			local entity = data.netid and NetworkGetEntityFromNetworkId(data.netid) or 0
+			if not exports.nc_vehicles:CanOpenTrunk(source, entity, plate) then
+				return false
+			end
+		end
+
 		inventory = Inventories[data.id]
 
 		if not inventory then
