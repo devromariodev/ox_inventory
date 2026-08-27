@@ -849,11 +849,15 @@ return {
         }
     },
 
+    -- NewCity (#88): o colete e ITEM DE VERDADE, nao aparencia (decisao do dono
+    -- 2026-08-27). Era `clothing = 'armour'`, e o handler de clothing do fork so
+    -- troca componente do ped — nao dava protecao nenhuma. Agora e usavel, e o
+    -- efeito vem do nc_survival (dono da vida/colete, ARQ-18) via o Item() em
+    -- modules/items/client.lua.
     ['armour'] = {
         label = 'Colete Balístico',
         rarity = 'rare',
         grid = { 2, 2 },
-        clothing = 'armour',
         weight = 3000,
         stack = false,
         client = {

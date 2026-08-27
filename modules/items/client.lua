@@ -88,6 +88,25 @@ local ox_inventory = exports[shared.resource]
 -- Clientside item use functions
 -----------------------------------------------------------------------------------------------
 
+-- NewCity (#88, decisao do dono 2026-08-27): o COLETE e item de verdade.
+-- A REGRA (quanto enche, quando pode usar) mora no nc_survival — dono da vida e
+-- do colete pelo ARQ-18 —, nao aqui: o fork so pergunta e aplica. Se o
+-- nc_survival estiver parado, o item simplesmente nao e consumido (degradacao
+-- limpa, em vez de sumir sem efeito).
+--
+-- O `useItem` so e chamado DEPOIS do "pode?": e assim que "so usa se o colete
+-- estiver zerado" nao consome o item a toa (mesmo padrao do bandage abaixo).
+Item('armour', function(data, slot)
+    if GetResourceState('nc_survival') ~= 'started' then return end
+    if not exports.nc_survival:CanWearArmour() then return end
+
+    ox_inventory:useItem(data, function(data)
+        if data then
+            exports.nc_survival:ApplyArmour()
+        end
+    end)
+end)
+
 Item('bandage', function(data, slot)
 	local maxHealth = GetEntityMaxHealth(cache.ped)
 	local health = GetEntityHealth(cache.ped)
