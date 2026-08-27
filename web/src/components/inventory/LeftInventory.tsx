@@ -95,13 +95,12 @@ const LeftInventory: React.FC = () => {
   return (
     <>
       {isSpatial ? (
-        <SpatialGrid inventory={leftInventory} showFilters />
+        <SpatialGrid inventory={leftInventory} />
       ) : (
         <InventoryGrid
           inventory={leftInventory}
           slots={remainingSlots}
           combinedWeight={combinedWeight}
-          showFilters
         />
       )}
 

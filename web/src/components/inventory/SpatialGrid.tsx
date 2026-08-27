@@ -19,8 +19,7 @@ import {
 } from '../../dnd/onSpatialDrop';
 import useRotateKey from '../../hooks/useRotateKey';
 import SpatialSlot, { spatialCellStyle } from './SpatialSlot';
-import InventoryFilters, { FilterId, InventorySort, matchesFilter, usePanelSortMode } from './InventoryFilters';
-import { BagIcon, CloseIcon, GridIcon, SearchIcon, WeightIcon } from '../utils/icons';
+import { BagIcon, GridIcon, WeightIcon } from '../utils/icons';
 
 const formatWeight = (weight: number): string => {
   if (weight >= 1000) return `${(weight / 1000).toFixed(1)}kg`;
@@ -117,15 +116,11 @@ const SpatialCell: React.FC<SpatialCellProps> = ({ index, inventory, rotated, co
 
 const MemoSpatialCell = React.memo(SpatialCell);
 
-const SpatialGrid: React.FC<{ inventory: Inventory; showFilters?: boolean }> = ({ inventory, showFilters }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState<FilterId | null>(null);
+const SpatialGrid: React.FC<{ inventory: Inventory }> = ({ inventory }) => {
   const [hoverCell, setHoverCell] = useState<number | null>(null);
   const isBusy = useAppSelector((state) => state.inventory.isBusy);
 
   const isPlayer = inventory.type === 'player';
-
-  const [sortMode, setSortMode] = usePanelSortMode();
 
   const weight = useMemo(
     () => (inventory.maxWeight !== undefined ? Math.floor(getTotalWeight(inventory.items) * 1000) / 1000 : 0),
@@ -184,27 +179,6 @@ const SpatialGrid: React.FC<{ inventory: Inventory; showFilters?: boolean }> = (
     return resolveCellDrop(dragSource, inventory, hoverCell, rotated);
   }, [isDragging, isOverGrid, hoverCell, dragSource, inventory, rotated]);
 
-  const matches = useMemo(() => {
-    if (!searchTerm && !activeFilter) return;
-
-    const lowerSearch = searchTerm.toLowerCase();
-    const matched = new Set<number>();
-
-    for (let i = 0; i < inventory.items.length; i++) {
-      const item = inventory.items[i];
-
-      if (!item.name) continue;
-
-      const label = item.metadata?.label || Items[item.name]?.label || item.name;
-      const matchesSearch =
-        !lowerSearch || item.name.toLowerCase().includes(lowerSearch) || label.toLowerCase().includes(lowerSearch);
-
-      if (matchesSearch && (!activeFilter || matchesFilter(item.name, activeFilter))) matched.add(item.slot);
-    }
-
-    return matched;
-  }, [inventory.items, searchTerm, activeFilter]);
-
   const items = useMemo(
     () =>
       inventory.items.filter(
@@ -252,49 +226,6 @@ const SpatialGrid: React.FC<{ inventory: Inventory; showFilters?: boolean }> = (
         )}
       </div>
 
-      <div className="inventory-search-wrapper">
-        <div className="inventory-search-container">
-          <input
-            type="text"
-            placeholder={Locale.ui_search_items || 'Search items...'}
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-            onClick={(event) => {
-              event.stopPropagation();
-              (event.target as HTMLInputElement).focus();
-            }}
-            onMouseDown={(event) => event.stopPropagation()}
-            onFocus={() => fetchNui('lockControls', true)}
-            onBlur={() => fetchNui('lockControls', false)}
-            className="inventory-search-input"
-          />
-          {searchTerm ? (
-            <button
-              onClick={(event) => {
-                event.stopPropagation();
-                setSearchTerm('');
-              }}
-              onMouseDown={(event) => event.stopPropagation()}
-              className="inventory-search-clear"
-              type="button"
-            >
-              <CloseIcon />
-            </button>
-          ) : (
-            <span className="inventory-search-icon">
-              <SearchIcon />
-            </span>
-          )}
-        </div>
-      </div>
-
-      <InventoryFilters
-        active={activeFilter}
-        onChange={setActiveFilter}
-        showChips={showFilters}
-        sort={<InventorySort value={sortMode} onChange={setSortMode} />}
-      />
-
       <div ref={dropGrid} className={`spatial-grid ${isDragging ? 'spatial-grid-dragging' : ''}`}>
         <div className="spatial-grid-cells" style={cellsStyle}>
           {Array.from({ length: cells }, (_, index) => (
@@ -316,7 +247,6 @@ const SpatialGrid: React.FC<{ inventory: Inventory; showFilters?: boolean }> = (
               inventoryType={inventory.type}
               inventoryGroups={inventory.groups}
               inventoryId={inventory.id}
-              dimmed={matches !== undefined && !matches.has(item.slot)}
             />
           ))}
 

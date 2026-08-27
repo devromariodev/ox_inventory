@@ -141,8 +141,12 @@ export const PREFERENCES: readonly PrefDef[] = [
     key: 'uiScale',
     kind: 'number',
     group: 'display',
-    label: 'Interface scale',
-    description: 'Scales every structural size token, so the layout reflows and text stays crisp.',
+    // NewCity: a UNICA regua exposta ao jogador (ver EXPOSED_PREFS). Escolhida em
+    // vez de `slotSize`/`itemImageSize` porque escala TUDO junto -- celula, arte e
+    // texto. As outras crescem a celula e deixam a letra do mesmo tamanho, o que
+    // nos extremos parece bug, nao ajuste.
+    label: 'Tamanho',
+    description: 'Deixa o inventario inteiro maior ou menor: itens, texto e espacos juntos.',
     default: 1,
     min: 0.75,
     max: 1.5,
@@ -665,8 +669,29 @@ for (const def of PREFERENCES) defByKey[def.key] = def;
 
 export const getPrefDef = (key: string): PrefDef | undefined => defByKey[key];
 
-export const getPreferences = (group: PrefGroup): PrefDef[] =>
-  PREFERENCES.filter((def) => def.group === group && !def.hidden && (!def.available || def.available()));
+/**
+ * NewCity (#88, Fase 3) — o que o JOGADOR pode mexer. Decisao do dono (2026-08-27):
+ * cor e tamanho, nada mais. As outras ~40 preferencias continuam existindo e
+ * continuam valendo o PADRAO delas; o que saiu foi a tela, nao o comportamento.
+ *
+ * Por que nao apagar as definicoes de vez, ja que a ideia e um fork enxuto: a
+ * definicao E o padrao. Sem ela, `getBooleanPref('showDurability')` passa a
+ * devolver falso, e a interface se comporta como se tudo estivesse desligado --
+ * some a barra de durabilidade, some o nome do item, some a dica. Apagar aqui nao
+ * enxuga: quebra. O enxugamento de verdade e o das FUNCIONALIDADES que nao usamos
+ * (crafting, licenca, evidencia, bridges de outros frameworks), que sai em PR
+ * proprio.
+ *
+ * Mexer nesta lista muda o que o jogador ve. As reguas expostas precisam ser
+ * `kind: 'number'` (o painel so desenha regua).
+ */
+export const EXPOSED_PREFS: readonly PrefKey[] = ['uiScale'];
+
+export const getExposedPreferences = (): NumberPrefDef[] =>
+  PREFERENCES.filter(
+    (def): def is NumberPrefDef =>
+      def.kind === 'number' && EXPOSED_PREFS.indexOf(def.key) !== -1 && (!def.available || def.available())
+  );
 
 
 export const prefLabelKey = (key: string) => `ui_pref_${key}`;

@@ -1,93 +1,36 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Items } from '../../store/items';
 import { Locale } from '../../store/locale';
 import { prefOptionKey, SORT_MODES, SortMode } from '../../store/preferences';
-import { UiConfig } from '../../store/uiConfig';
 import { getSortMode, isSortAvailable, PREF_CHANGE_EVENT } from '../../helpers';
 import Dropdown from '../utils/Dropdown';
-import { FoodIcon, MedicalIcon, ShirtIcon, WeaponIcon } from '../utils/icons';
 
-export type FilterId = 'weapon' | 'medical' | 'food' | 'clothing';
-
-const DEFAULT_FILTER_ITEMS: Record<FilterId, string[]> = {
-  weapon: [],
-  medical: ['bandage', 'medikit', 'medkit', 'firstaid', 'painkillers', 'ifak', 'defibrillator'],
-  food: ['burger', 'sandwich', 'taco', 'pizza', 'water', 'water_bottle', 'cola', 'coffee'],
-  clothing: [],
-};
-
-const FILTERS: { id: FilterId; localeKey: string; fallback: string; icon: React.FC }[] = [
-  { id: 'weapon', localeKey: 'ui_filter_weapons', fallback: 'Weapons', icon: WeaponIcon },
-  { id: 'medical', localeKey: 'ui_filter_medical', fallback: 'Medical', icon: MedicalIcon },
-  { id: 'food', localeKey: 'ui_filter_food', fallback: 'Food', icon: FoodIcon },
-  { id: 'clothing', localeKey: 'ui_filter_clothing', fallback: 'Clothing', icon: ShirtIcon },
-];
-
-const getFilterItems = (id: FilterId): string[] => {
-  const configured = (UiConfig as { filters?: Record<string, string[]> }).filters?.[id];
-
-  return Array.isArray(configured) && configured.length > 0 ? configured : DEFAULT_FILTER_ITEMS[id];
-};
-
-export const matchesFilter = (name: string, id: FilterId): boolean => {
-  const lowerName = name.toLowerCase();
-
-  if (getFilterItems(id).includes(lowerName)) return true;
-
-  switch (id) {
-    case 'weapon':
-      return lowerName.startsWith('weapon_') || lowerName.startsWith('ammo-') || Items[name]?.ammoName !== undefined;
-    case 'clothing':
-      return Items[name]?.clothing !== undefined;
-    default:
-      return false;
-  }
-};
-
+/**
+ * NewCity (#88, Fase 3) — sobrou a ORDENAÇÃO.
+ *
+ * As categorias (arma / médico / comida / roupa) e a busca por nome saíram por
+ * decisão do dono (2026-08-27): a grade cabe inteira na tela, então filtrar e
+ * procurar era ferramenta para um problema que não temos — e cada uma trazia
+ * consigo uma tabela de "o que conta como comida" que ninguém mantinha.
+ *
+ * A ordenação continua só onde ela FUNCIONA: o painel de slots (loja e bancada).
+ * Na grade ela é inerte por natureza — um item ocupa várias células a partir do
+ * seu slot, e reordenar só a exibição rasgaria o formato dele.
+ */
 interface InventoryFiltersProps {
-  active: FilterId | null;
-  onChange: (next: FilterId | null) => void;
-  showChips?: boolean;
   sort?: React.ReactNode;
 }
 
-const InventoryFilters: React.FC<InventoryFiltersProps> = ({ active, onChange, showChips = true, sort }) => (
-  <div className="filters">
-    {showChips && (
-      <>
-        <button
-          type="button"
-          className={`filter ${active === null ? 'filter-active' : ''}`}
-          title={Locale.ui_filter_all || 'All'}
-          onClick={() => onChange(null)}
-        >
-          <span className="filter-text">{Locale.ui_filter_all || 'All'}</span>
-        </button>
-        {FILTERS.map(({ id, localeKey, fallback, icon: Icon }) => (
-          <button
-            type="button"
-            key={`filter-${id}`}
-            className={`filter ${active === id ? 'filter-active' : ''}`}
-            title={Locale[localeKey] || fallback}
-            onClick={() => onChange(active === id ? null : id)}
-          >
-            <Icon />
-          </button>
-        ))}
-      </>
-    )}
-
-    {sort && (
+const InventoryFilters: React.FC<InventoryFiltersProps> = ({ sort }) =>
+  sort ? (
+    <div className="filters">
       <div className="filters-sort">
-        <span className="filters-sort-label">{Locale.ui_sort || 'Sort'}</span>
+        <span className="filters-sort-label">{Locale.ui_sort || 'Ordenar'}</span>
         {sort}
       </div>
-    )}
-  </div>
-);
+    </div>
+  ) : null;
 
 export default InventoryFilters;
-
 
 export const usePrefsRevision = (): number => {
   const [revision, setRevision] = useState(0);
@@ -105,16 +48,15 @@ export const usePrefsRevision = (): number => {
 
 const SORT_LABELS: Record<SortMode, string> = {
   slot: 'Slot',
-  name: 'Name',
-  weight: 'Weight',
-  rarity: 'Rarity',
-  count: 'Count',
+  name: 'Nome',
+  weight: 'Peso',
+  rarity: 'Raridade',
+  count: 'Quantidade',
 };
 
 const GRID_UNAVAILABLE_FALLBACK =
-  'Sorting is unavailable in grid layout: an item covers several cells from its slot, so ' +
-  'reordering the display alone would tear its footprint apart. Repacking would have to happen ' +
-  'on the server.';
+  'Ordenar não vale na grade: um item ocupa várias células a partir do slot dele, ' +
+  'então reordenar só a exibição rasgaria o formato.';
 
 export const usePanelSortMode = (): [SortMode, (next: SortMode) => void] => {
   const prefsRevision = usePrefsRevision();
@@ -140,7 +82,7 @@ interface InventorySortProps {
 export const InventorySort: React.FC<InventorySortProps> = ({ value, onChange }) => {
   const available = isSortAvailable();
 
-  const label = Locale.ui_pref_sortMode || 'Sort items by';
+  const label = Locale.ui_pref_sortMode || 'Ordenar por';
   const title = available ? label : Locale.ui_sort_unavailable_grid || GRID_UNAVAILABLE_FALLBACK;
 
   const options = SORT_MODES.map((option) => ({

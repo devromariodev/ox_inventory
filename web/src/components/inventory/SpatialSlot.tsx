@@ -61,7 +61,6 @@ interface SpatialSlotProps {
   inventoryType: Inventory['type'];
   inventoryGroups: Inventory['groups'];
   cols: number;
-  dimmed: boolean;
 }
 
 const SpatialSlot: React.FC<SpatialSlotProps> = ({
@@ -70,7 +69,6 @@ const SpatialSlot: React.FC<SpatialSlotProps> = ({
   inventoryType,
   inventoryGroups,
   cols,
-  dimmed,
 }) => {
   const manager = useDragDropManager();
   const dispatch = useAppDispatch();
@@ -181,9 +179,7 @@ const SpatialSlot: React.FC<SpatialSlotProps> = ({
   const rarityKey = useMemo(() => getItemRarityKey(item), [item]);
   const hasRarityAccent = rarityKey !== undefined && rarityKey !== NEUTRAL_RARITY;
 
-  const className = `spatial-item inventory-slot${rotated ? ' spatial-item-rotated' : ''}${
-    dimmed ? ' spatial-item-dimmed' : ''
-  }${rarityKey ? ` rarity-${rarityKey}` : ''}`;
+  const className = `spatial-item inventory-slot${rotated ? ' spatial-item-rotated' : ''}${rarityKey ? ` rarity-${rarityKey}` : ''}`;
 
   const style: React.CSSProperties = {
     ...spatialCellStyle(x, y, width, height),

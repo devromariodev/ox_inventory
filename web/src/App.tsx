@@ -15,12 +15,15 @@ import DragPreview from './components/utils/DragPreview';
 import { fetchNui } from './utils/fetchNui';
 import { useDragDropManager } from 'react-dnd';
 import KeyPress from './components/utils/KeyPress';
+import ptbr from '../../locales/pt-br.json';
 
 debugData([
   {
     action: 'init',
     data: {
-      locale: {},
+      // NewCity: o preview do navegador carrega o MESMO pt-br do jogo, senao a
+      // gente revisa a interface em ingles e so descobre o texto errado no server.
+      locale: ptbr as Record<string, string>,
       imagepath: 'images',
       leftInventory: { id: 'test', type: 'player', slots: 60, maxWeight: 5000, items: [] },
       items: {
@@ -76,7 +79,9 @@ debugData([
         },
       },
       uiConfig: {
-        layout: 'slots',
+        // NewCity: o servidor esta TRAVADO em grid (ADR-0006). O preview tem que
+        // mostrar o que o jogador ve, nao o layout de slots que nao usamos.
+        layout: 'grid',
         grid: { columns: 10, allowRotate: true },
         clothing: {
           enabled: true,

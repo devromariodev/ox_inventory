@@ -10,14 +10,8 @@ import { Items } from '../../store/items';
 import { Locale } from '../../store/locale';
 import { togglePanelCollapsed, usePanelCollapsed } from '../../hooks/usePanelCollapse';
 import { fetchNui } from '../../utils/fetchNui';
-import InventoryFilters, {
-  FilterId,
-  InventorySort,
-  matchesFilter,
-  usePanelSortMode,
-  usePrefsRevision,
-} from './InventoryFilters';
-import { BagIcon, CloseIcon, GridIcon, SearchIcon } from '../utils/icons';
+import InventoryFilters, { InventorySort, usePanelSortMode, usePrefsRevision } from './InventoryFilters';
+import { BagIcon, GridIcon} from '../utils/icons';
 
 const PAGE_SIZE = 30;
 
@@ -40,12 +34,9 @@ interface InventoryGridProps {
   inventory: Inventory;
   slots?: Slot[];
   combinedWeight?: number;
-  showFilters?: boolean;
 }
 
-const InventoryGrid: React.FC<InventoryGridProps> = ({ inventory, slots, combinedWeight, showFilters }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [activeFilter, setActiveFilter] = useState<FilterId | null>(null);
+const InventoryGrid: React.FC<InventoryGridProps> = ({ inventory, slots, combinedWeight }) => {
   const [page, setPage] = useState(0);
   const containerRef = useRef(null);
   const { ref, entry } = useIntersection({ threshold: 0.5 });
@@ -81,27 +72,6 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ inventory, slots, combine
       setPage((prev) => ++prev);
     }
   }, [entry]);
-
-  const filteredItems = useMemo(() => {
-    if (!searchTerm && !activeFilter) return sortedSlots;
-
-    const lowerSearch = searchTerm.toLowerCase();
-
-    return sortedSlots.map((item) => {
-      if (!item.name) return item;
-
-      const itemLabel = item.metadata?.label || Items[item.name]?.label || item.name;
-
-      const matchesSearch =
-        !lowerSearch ||
-        item.name.toLowerCase().includes(lowerSearch) ||
-        itemLabel.toLowerCase().includes(lowerSearch);
-
-      if (matchesSearch && (!activeFilter || matchesFilter(item.name, activeFilter))) return item;
-
-      return { ...item, name: undefined, count: undefined, metadata: undefined };
-    });
-  }, [sortedSlots, searchTerm, activeFilter]);
 
   const itemCount = useMemo(() => inventory.items.filter((item) => item.name).length, [inventory.items]);
 
@@ -144,52 +114,11 @@ const InventoryGrid: React.FC<InventoryGridProps> = ({ inventory, slots, combine
         )}
       </div>
 
-      <div className="inventory-search-wrapper">
-        <div className="inventory-search-container">
-          <input
-            type="text"
-            placeholder={Locale.ui_search_items || 'Search items...'}
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-            onClick={(event) => {
-              event.stopPropagation();
-              (event.target as HTMLInputElement).focus();
-            }}
-            onMouseDown={(event) => event.stopPropagation()}
-            onFocus={() => fetchNui('lockControls', true)}
-            onBlur={() => fetchNui('lockControls', false)}
-            className="inventory-search-input"
-          />
-          {searchTerm ? (
-            <button
-              onClick={(event) => {
-                event.stopPropagation();
-                setSearchTerm('');
-              }}
-              onMouseDown={(event) => event.stopPropagation()}
-              className="inventory-search-clear"
-              type="button"
-            >
-              <CloseIcon />
-            </button>
-          ) : (
-            <span className="inventory-search-icon">
-              <SearchIcon />
-            </span>
-          )}
-        </div>
-      </div>
-
-      <InventoryFilters
-        active={activeFilter}
-        onChange={setActiveFilter}
-        showChips={showFilters}
-        sort={<InventorySort value={sortMode} onChange={setSortMode} />}
-      />
+      <InventoryFilters sort={<InventorySort value={sortMode} onChange={setSortMode} />} />
 
       <div className="inventory-grid-wrapper">
         <div className="inventory-grid-container" ref={containerRef}>
-          {filteredItems.slice(0, (page + 1) * pageSize).map((item, index) => {
+          {sortedSlots.slice(0, (page + 1) * pageSize).map((item, index) => {
             const key = `${inventory.type}-${inventory.id}-${item.slot}`;
             const slot = (
               <InventorySlot

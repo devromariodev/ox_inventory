@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   FloatingFocusManager,
   FloatingOverlay,
@@ -9,40 +9,34 @@ import {
   useTransitionStyles,
 } from '@floating-ui/react';
 import { Locale } from '../../store/locale';
+import { resetTheme, setUiConfig, THEME_PRESET_NAMES, THEME_PRESETS, UiConfig } from '../../store/uiConfig';
 import {
-  CUSTOM_THEME_NAME,
-  resetTheme,
-  setUiConfig,
-  THEME_PRESET_NAMES,
-  THEME_PRESETS,
-  UiConfig,
-} from '../../store/uiConfig';
-import {
-  getBooleanPref,
-  getEnumPref,
-  getListPref,
   getNumberPref,
   getPref,
-  getPreferences,
+  getExposedPreferences,
   NumberPrefDef,
-  PREF_GROUPS,
-  PrefDef,
-  PrefGroup,
   PrefKey,
   PrefValue,
   prefDescriptionKey,
-  prefGroupKey,
   prefLabelKey,
-  prefOptionKey,
   setPrefs,
 } from '../../store/preferences';
 import { flushPrefs, persistPrefs, PREF_CHANGE_EVENT } from '../../helpers';
 import { ThemeColors } from '../../typings/uiConfig';
 import { fetchNui } from '../../utils/fetchNui';
-import { formatColor, isFunctionalNotation, parseColor, Rgba } from '../../utils/color';
 import { CloseIcon } from '../utils/icons';
-import ColorPicker from '../utils/ColorPicker';
 
+/**
+ * NewCity (#88, Fase 3) — o painel de ajustes tinha 5 abas e ~40 preferências
+ * (espaçamento, fontes, contraste, tooltips, ordenação, cores soltas…). Decisão do
+ * dono (2026-08-27): fica **cor e tamanho**, nada mais. Uma cara só para o servidor
+ * inteiro, e nada aqui que o jogador precise configurar para jogar.
+ *
+ * O que sumiu daqui NÃO some do inventário: cada preferência continua valendo o
+ * padrão dela (o motor de preferências aplica os defaults ao carregar). Tirar a
+ * DEFINIÇÃO, e não só a tela, apagaria o padrão junto — e a interface passaria a
+ * se comportar como se tudo estivesse desligado. Ver `EXPOSED_PREFS` no store.
+ */
 interface Props {
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -51,58 +45,6 @@ interface Props {
 const SAVE_DEBOUNCE = 400;
 
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
-
-type TabId = 'appearance' | PrefGroup;
-
-const TABS: readonly TabId[] = ['appearance', ...PREF_GROUPS];
-
-const GROUP_LABELS: Record<PrefGroup, string> = {
-  display: 'Display',
-  accessibility: 'Accessibility',
-  behaviour: 'Behaviour',
-  inventory: 'Inventory',
-};
-
-const GROUP_DESCRIPTIONS: Record<PrefGroup, string> = {
-  display: 'Size, spacing, dimming and motion.',
-  accessibility: 'Make item rarity readable without relying on colour alone.',
-  behaviour: 'Tooltips, the hotbar and what a slot shows.',
-  inventory: 'How items are ordered on screen. Nothing here moves an item.',
-};
-
-const prefGroupDescriptionKey = (group: PrefGroup) => `ui_prefs_desc_${group}`;
-
-const THEME_TOKENS: ReadonlyArray<{ key: keyof ThemeColors; fallback: string }> = [
-  { key: 'mainColor', fallback: 'Accent' },
-  { key: 'secondaryColor', fallback: 'Secondary' },
-  { key: 'rgbColor1', fallback: 'Icon tile centre' },
-  { key: 'rgbColor2', fallback: 'Icon tile edge' },
-  { key: 'backgroundColor1', fallback: 'Panel surface' },
-  { key: 'backgroundColor2', fallback: 'Slot tint' },
-  { key: 'backgroundColor3', fallback: 'Hover fill' },
-  { key: 'textShadow', fallback: 'Text glow' },
-  { key: 'photoShadowColor', fallback: 'Character glow' },
-];
-
-
-const localeToken = (key: keyof ThemeColors, fallback: string) => Locale[`ui_theme_${key}`] || fallback;
-
-const PRESET_SWATCHES: readonly string[] = (() => {
-  const seen: string[] = [];
-
-  for (const name of THEME_PRESET_NAMES) {
-    const preset = THEME_PRESETS[name];
-
-    if (!preset) continue;
-
-    for (const colour of [preset.mainColor, preset.secondaryColor]) {
-      if (typeof colour === 'string' && colour && seen.indexOf(colour) === -1) seen.push(colour);
-    }
-  }
-
-  return seen;
-})();
-
 
 const decimalsForStep = (step: number): number => {
   if (!Number.isFinite(step) || step >= 1) return 0;
@@ -121,7 +63,8 @@ const formatNumber = (def: NumberPrefDef, value: number): string => {
 
 type PrefWriter = (key: PrefKey, value: PrefValue) => void;
 
-const PrefRow: React.FC<{ def: PrefDef; onChange: PrefWriter }> = ({ def, onChange }) => {
+/** Só o tipo `number` sobrou: as preferências expostas são réguas (tamanho). */
+const PrefRow: React.FC<{ def: NumberPrefDef; onChange: PrefWriter }> = ({ def, onChange }) => {
   const label = Locale[prefLabelKey(def.key)] || def.label;
   const description = Locale[prefDescriptionKey(def.key)] || def.description;
 
@@ -129,62 +72,22 @@ const PrefRow: React.FC<{ def: PrefDef; onChange: PrefWriter }> = ({ def, onChan
     <div className="settings-pref" data-pref={def.key}>
       <div className="settings-pref-head">
         <span className="settings-pref-label">{label}</span>
-
-        {def.kind === 'number' && (
-          <span className="settings-pref-value">{formatNumber(def, getNumberPref(def.key))}</span>
-        )}
-
-        {def.kind === 'boolean' && (
-          <button
-            type="button"
-            role="switch"
-            aria-checked={getBooleanPref(def.key)}
-            aria-label={label}
-            className={`settings-toggle${getBooleanPref(def.key) ? ' settings-toggle-on' : ''}`}
-            onClick={() => onChange(def.key, !getBooleanPref(def.key))}
-          >
-            <span className="settings-toggle-knob" />
-          </button>
-        )}
-
-        {def.kind === 'stringArray' && <span className="settings-pref-value">{getListPref(def.key).length}</span>}
+        <span className="settings-pref-value">{formatNumber(def, getNumberPref(def.key))}</span>
       </div>
 
       {description && <p className="settings-pref-desc">{description}</p>}
 
-      {def.kind === 'number' && (
-        <input
-          className="settings-range"
-          type="range"
-          min={def.min}
-          max={def.max}
-          step={def.step}
-          value={getNumberPref(def.key)}
-          aria-label={label}
-          aria-valuetext={formatNumber(def, getNumberPref(def.key))}
-          onChange={(event) => onChange(def.key, Number(event.target.value))}
-        />
-      )}
-
-      {def.kind === 'enum' && (
-        <div className="settings-segment" role="group" aria-label={label}>
-          {def.options.map((option) => {
-            const active = getEnumPref(def.key) === option;
-
-            return (
-              <button
-                key={option}
-                type="button"
-                aria-pressed={active}
-                className={`settings-segment-option${active ? ' settings-segment-active' : ''}`}
-                onClick={() => onChange(def.key, option)}
-              >
-                {Locale[prefOptionKey(def.key, option)] || option}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      <input
+        className="settings-range"
+        type="range"
+        min={def.min}
+        max={def.max}
+        step={def.step}
+        value={getNumberPref(def.key)}
+        aria-label={label}
+        aria-valuetext={formatNumber(def, getNumberPref(def.key))}
+        onChange={(event) => onChange(def.key, Number(event.target.value))}
+      />
     </div>
   );
 };
@@ -203,51 +106,7 @@ const SettingsPanel: React.FC<Props> = ({ visible, setVisible }) => {
   const { isMounted, styles } = useTransitionStyles(context);
   const { getFloatingProps } = useInteractions([dismiss]);
 
-  const [tab, setTab] = useState<TabId>('appearance');
-  const [direction, setDirection] = useState(1);
-  const [indicator, setIndicator] = useState({ x: 0, y: 0, width: 0, height: 0, ready: false });
-  const tabsRef = useRef<HTMLDivElement | null>(null);
-
-  const selectTab = (id: TabId) => {
-    if (id === tab) return;
-
-    setDirection(TABS.indexOf(id) > TABS.indexOf(tab) ? 1 : -1);
-    setTab(id);
-  };
-
-  useLayoutEffect(() => {
-    const strip = tabsRef.current;
-
-    if (!strip) return;
-
-    const measure = () => {
-      const active = strip.querySelector<HTMLElement>('.settings-tab-active');
-
-      if (!active) return;
-
-      setIndicator((prev) => ({
-        x: active.offsetLeft,
-        y: active.offsetTop,
-        width: active.offsetWidth,
-        height: active.offsetHeight,
-        ready: prev.ready || active.offsetWidth > 0,
-      }));
-    };
-
-    measure();
-
-    const observer = new ResizeObserver(measure);
-
-    observer.observe(strip);
-
-    for (const child of Array.from(strip.children)) observer.observe(child);
-
-    return () => observer.disconnect();
-  }, [tab, isMounted]);
-
   const [themeName, setThemeName] = useState<string>(UiConfig.theme.name);
-  const [text, setText] = useState<ThemeColors>(UiConfig.theme.colors);
-  const [applied, setApplied] = useState<ThemeColors>(UiConfig.theme.colors);
   const [status, setStatus] = useState<SaveStatus>('idle');
   const [, setRevision] = useState(0);
 
@@ -293,7 +152,6 @@ const SettingsPanel: React.FC<Props> = ({ visible, setVisible }) => {
   const commit = useCallback(
     (name: string, colors: ThemeColors) => {
       setThemeName(name);
-      setApplied(colors);
       setUiConfig({ theme: { name, colors } });
 
       themePendingRef.current = { name, colors };
@@ -328,8 +186,6 @@ const SettingsPanel: React.FC<Props> = ({ visible, setVisible }) => {
     if (!visible) return;
 
     setThemeName(UiConfig.theme.name);
-    setText(UiConfig.theme.colors);
-    setApplied(UiConfig.theme.colors);
     setStatus('idle');
   }, [visible]);
 
@@ -400,70 +256,30 @@ const SettingsPanel: React.FC<Props> = ({ visible, setVisible }) => {
 
     if (!preset) return;
 
-    setText(preset);
     commit(name, preset);
   };
 
-  const setToken = (key: keyof ThemeColors, value: string) => {
-    setText((current) => ({ ...current, [key]: value }));
-
-    const parsed = parseColor(value);
-
-    if (!parsed) return;
-
-    commit(CUSTOM_THEME_NAME, {
-      ...applied,
-      [key]: formatColor(parsed, isFunctionalNotation(value) || parsed.a < 1),
-    });
-  };
-
-  const setTokenFromPicker = (key: keyof ThemeColors, picked: Rgba) => {
-    const value = formatColor(picked, isFunctionalNotation(applied[key]) || picked.a < 1);
-
-    setText((state) => ({ ...state, [key]: value }));
-    commit(CUSTOM_THEME_NAME, { ...applied, [key]: value });
-  };
-
+  /** Volta cor E tamanho ao padrão — com uma tela só, "padrão" é tudo. */
   const onReset = () => {
-    if (tab === 'appearance') {
-      const theme = resetTheme();
+    const theme = resetTheme();
 
-      setText(theme.colors);
-      commit(theme.name, theme.colors);
-
-      return;
-    }
+    commit(theme.name, theme.colors);
 
     const defaults: Record<string, PrefValue> = {};
 
-    for (const def of getPreferences(tab)) {
-      defaults[def.key] = def.kind === 'stringArray' ? def.default.slice() : def.default;
-    }
+    for (const def of getExposedPreferences()) defaults[def.key] = def.default;
 
     commitPrefs(defaults);
   };
 
-  const tabLabel = (id: TabId) =>
-    id === 'appearance' ? Locale.ui_appearance || 'Appearance' : Locale[prefGroupKey(id)] || GROUP_LABELS[id];
-
-  const description =
-    tab === 'appearance'
-      ? Locale.ui_appearance_description || 'Pick a colour scheme for your inventory.'
-      : Locale[prefGroupDescriptionKey(tab)] || GROUP_DESCRIPTIONS[tab];
-
   const statusLabel =
     status === 'saving'
-      ? Locale.ui_settings_saving || Locale.ui_theme_saving || 'Saving…'
+      ? Locale.ui_settings_saving || Locale.ui_theme_saving || 'Salvando…'
       : status === 'saved'
-      ? Locale.ui_settings_saved || Locale.ui_theme_saved || 'Saved'
+      ? Locale.ui_settings_saved || Locale.ui_theme_saved || 'Salvo'
       : status === 'error'
-      ? Locale.ui_settings_save_failed || Locale.ui_theme_save_failed || 'Not saved on this server'
+      ? Locale.ui_settings_save_failed || Locale.ui_theme_save_failed || 'Não salvou neste servidor'
       : '';
-
-  const resetLabel =
-    tab === 'appearance'
-      ? Locale.ui_theme_reset || 'Reset to default'
-      : Locale.ui_prefs_reset || 'Reset all to defaults';
 
   return (
     <>
@@ -478,7 +294,7 @@ const SettingsPanel: React.FC<Props> = ({ visible, setVisible }) => {
                 style={styles}
               >
                 <div className="useful-controls-dialog-title">
-                  <p>{Locale.ui_settings || 'Settings'}</p>
+                  <p>{Locale.ui_settings || 'Ajustes'}</p>
                   <div
                     className="useful-controls-dialog-close settings-dialog-close"
                     onClick={() => setVisible(false)}
@@ -487,115 +303,44 @@ const SettingsPanel: React.FC<Props> = ({ visible, setVisible }) => {
                   </div>
                 </div>
 
-                <div className="settings-tabs" role="tablist" ref={tabsRef}>
-                  <span
-                    aria-hidden="true"
-                    className={`settings-tab-indicator${indicator.ready ? ' settings-tab-indicator-ready' : ''}`}
-                    style={{
-                      transform: `translate(${indicator.x}px, ${indicator.y}px)`,
-                      width: indicator.width,
-                      height: indicator.height,
-                    }}
-                  />
-                  {TABS.map((id) => (
-                    <button
-                      key={id}
-                      type="button"
-                      role="tab"
-                      aria-selected={tab === id}
-                      className={`settings-tab${tab === id ? ' settings-tab-active' : ''}`}
-                      onClick={() => selectTab(id)}
-                    >
-                      {tabLabel(id)}
-                    </button>
-                  ))}
-                </div>
-
                 <div className="settings-body">
-                  <div key={tab} className="settings-tabpanel" data-direction={direction}>
-                  <p className="settings-description">{description}</p>
+                  <div className="settings-tabpanel">
+                    <section className="settings-section">
+                      <p className="settings-section-title">{Locale.ui_theme_presets || 'Cor'}</p>
+                      <div className="settings-presets">
+                        {THEME_PRESET_NAMES.map((name) => {
+                          const preset = THEME_PRESETS[name];
 
-                  {tab === 'appearance' ? (
-                    <>
-                      <section className="settings-section">
-                        <p className="settings-section-title">{Locale.ui_theme_presets || 'Presets'}</p>
-                        <div className="settings-presets">
-                          {THEME_PRESET_NAMES.map((name) => {
-                            const preset = THEME_PRESETS[name];
+                          if (!preset) return null;
 
-                            if (!preset) return null;
+                          return (
+                            <button
+                              key={name}
+                              type="button"
+                              className={`settings-preset${themeName === name ? ' settings-preset-active' : ''}`}
+                              onClick={() => applyPreset(name)}
+                              aria-pressed={themeName === name}
+                            >
+                              <span
+                                className="settings-preset-swatch"
+                                style={{
+                                  background: `linear-gradient(135deg, ${preset.mainColor} 0%, ${preset.secondaryColor} 100%)`,
+                                }}
+                              />
+                              <span className="settings-preset-label">{Locale[`ui_theme_${name}`] || name}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </section>
 
-                            return (
-                              <button
-                                key={name}
-                                type="button"
-                                className={`settings-preset${themeName === name ? ' settings-preset-active' : ''}`}
-                                onClick={() => applyPreset(name)}
-                                aria-pressed={themeName === name}
-                              >
-                                <span
-                                  className="settings-preset-swatch"
-                                  style={{
-                                    background: `linear-gradient(135deg, ${preset.mainColor} 0%, ${preset.secondaryColor} 100%)`,
-                                  }}
-                                />
-                                <span className="settings-preset-label">{Locale[`ui_theme_${name}`] || name}</span>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </section>
-
-                      <section className="settings-section">
-                        <div className="settings-section-head">
-                          <p className="settings-section-title">{Locale.ui_theme_custom || 'Custom colours'}</p>
-                          <span
-                            className={`settings-section-tag${
-                              themeName === CUSTOM_THEME_NAME ? ' settings-section-tag-on' : ''
-                            }`}
-                            aria-hidden={themeName !== CUSTOM_THEME_NAME}
-                          >
-                            {Locale.ui_theme_custom_active || 'Active'}
-                          </span>
-                        </div>
-
-                        <div className="settings-tokens">
-                          {THEME_TOKENS.map(({ key, fallback }) => {
-                            const value = text[key];
-                            const invalid = parseColor(value) === null;
-
-                            return (
-                              <div className="settings-token" key={key}>
-                                <span className="settings-token-label">{localeToken(key, fallback)}</span>
-                                <ColorPicker
-                                  value={value}
-                                  onChange={(picked) => setTokenFromPicker(key, picked)}
-                                  swatches={PRESET_SWATCHES}
-                                  ariaLabel={localeToken(key, fallback)}
-                                />
-                                <input
-                                  className={`settings-token-text${invalid ? ' settings-token-invalid' : ''}`}
-                                  type="text"
-                                  value={value}
-                                  spellCheck={false}
-                                  onChange={(event) => setToken(key, event.target.value)}
-                                  aria-label={localeToken(key, fallback)}
-                                />
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </section>
-                    </>
-                  ) : (
                     <section className="settings-section">
                       <div className="settings-prefs">
-                        {getPreferences(tab).map((def) => (
+                        {getExposedPreferences().map((def) => (
                           <PrefRow key={def.key} def={def} onChange={onPrefChange} />
                         ))}
                       </div>
                     </section>
-                  )}
                   </div>
                 </div>
 
@@ -603,14 +348,14 @@ const SettingsPanel: React.FC<Props> = ({ visible, setVisible }) => {
                   <span className="settings-status">{statusLabel}</span>
                   <div className="settings-footer-actions">
                     <button type="button" className="settings-button" onClick={onReset}>
-                      {resetLabel}
+                      {Locale.ui_theme_reset || 'Voltar ao padrão'}
                     </button>
                     <button
                       type="button"
                       className="settings-button settings-button-primary"
                       onClick={() => setVisible(false)}
                     >
-                      {Locale.ui_close || 'Close'}
+                      {Locale.ui_close || 'Fechar'}
                     </button>
                   </div>
                 </div>
