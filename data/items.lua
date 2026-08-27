@@ -53,6 +53,7 @@ return {
     },
 
     ['sim_card'] = {
+        grid = { 1, 1 },
         label = 'SIM Card',
         rarity = 'uncommon',
         weight = 5,
@@ -62,60 +63,6 @@ return {
         server = { export = 'sd-phone.useSim_card' },
     },
 
-    ['testburger'] = {
-        label = 'Test Burger',
-        rarity = 'common',
-        weight = 220,
-        degrade = 60,
-        client = {
-            image = 'burger_chicken.png',
-            status = { hunger = 200000 },
-            anim = 'eating',
-            prop = 'burger',
-            usetime = 2500,
-            export = 'ox_inventory_examples.testburger'
-        },
-        server = {
-            export = 'ox_inventory_examples.testburger',
-            test = 'what an amazingly delicious burger, amirite?'
-        },
-        buttons = {
-            {
-                label = 'Lick it',
-                action = function(slot)
-                    print('You licked the burger')
-                end
-            },
-            {
-                label = 'Squeeze it',
-                action = function(slot)
-                    print('You squeezed the burger :(')
-                end
-            },
-            {
-                label = 'What do you call a vegan burger?',
-                group = 'Hamburger Puns',
-                action = function(slot)
-                    print('A misteak.')
-                end
-            },
-            {
-                label = 'What do frogs like to eat with their hamburgers?',
-                group = 'Hamburger Puns',
-                action = function(slot)
-                    print('French flies.')
-                end
-            },
-            {
-                label = 'Why were the burger and fries running?',
-                group = 'Hamburger Puns',
-                action = function(slot)
-                    print('Because they\'re fast food.')
-                end
-            }
-        },
-        consume = 0.3
-    },
 
     ['bandage'] = {
         grid = { 1, 1 },
@@ -148,104 +95,14 @@ return {
         description = "A usable megaphone"
     },
 
-    ["ttt_teleporter"] = {
-        label = "Teleporter Beacon",
-        rarity = 'epic',
-        weight = 500,
-        stack = false,
-        close = true,
-        consume = 0,
-        description = "Advanced teleportation device. Place a beacon and teleport back to it when needed.",
-        client = {
-            image = "ttt_teleporter.png",
-        },
-        server = {
-            export = 'sd-ttt.useTtt_teleporter'
-        }
-    },
     
-    ["ttt_portable_tester"] = {
-        label = "Portable DNA Scanner",
-        rarity = 'rare',
-        weight = 300,
-        stack = false,
-        close = true,
-        consume = 1,
-        description = "Single-use device that can identify if a player is a traitor. Detective equipment only.",
-        client = {
-            image = "ttt_portable_tester.png",
-        },
-        server = {
-            export = 'sd-ttt.useTtt_portable_tester'
-        }
-    },
     
-    ["ttt_health_station"] = {
-        label = "Health Station",
-        rarity = 'rare',
-        grid = { 2, 2 },
-        weight = 1000,
-        stack = false,
-        close = true,
-        consume = 1,
-        description = "Deployable medical station that heals nearby innocents. Contains 200HP worth of healing.",
-        client = {
-            image = "ttt_health_station.png",
-        },
-        server = {
-            export = 'sd-ttt.useTtt_health_station'
-        }
-    },
     
-    ["ttt_c4"] = {
-        label = "C4 Explosive",
-        rarity = 'epic',
-        weight = 800,
-        stack = true,
-        close = true,
-        consume = 1,
-        description = "Remote detonated explosive with adjustable timer. Massive area damage. Traitor equipment.",
-        client = {
-            image = "ttt_c4.png",
-        },
-        server = {
-            export = 'sd-ttt.useTtt_c4'
-        }
-    },
     
-    ["ttt_defuser"] = {
-        label = "Bomb Defuser Kit",
-        rarity = 'rare',
-        weight = 200,
-        stack = false,
-        close = true,
-        consume = 0,
-        description = "Professional defusal kit that reduces bomb defuse time by 50%. Detective equipment.",
-        client = {
-            image = "ttt_defuser.png",
-        },
-        server = {
-            export = 'sd-ttt.useTtt_defuser'
-        }
-    },
     
-    ["ttt_radar"] = {
-        label = "Player Radar",
-        rarity = 'rare',
-        weight = 250,
-        stack = false,
-        close = true,
-        consume = 0,
-        description = "Shows all player positions for 5 seconds. 15 second cooldown between uses.",
-        client = {
-            image = "ttt_radar.png",
-        },
-        server = {
-            export = 'sd-ttt.useTtt_radar'
-        }
-    },
 
     ['screwdriver'] = {
+        grid = { 2, 1 },
     label = 'Screwdriver',
     rarity = 'common',
     weight = 300,
@@ -254,6 +111,7 @@ return {
     description = 'A flathead screwdriver for prying coin boxes and unbolting fixtures.',
 },
 ['wirecutter'] = {
+    grid = { 2, 1 },
     label = 'Wire Cutters',
     rarity = 'common',
     weight = 600,
@@ -262,6 +120,7 @@ return {
     description = 'Sharp wire cutters that slice through brake lines and wiring.',
 },
 ['cutter'] = {
+    grid = { 2, 1 },
     label = 'Box Cutter',
     rarity = 'common',
     weight = 200,
@@ -270,6 +129,7 @@ return {
     description = 'A retractable box cutter - sharp enough to slash tyres and puncture tanks.',
 },
 ['multitool'] = {
+    grid = { 2, 1 },
     label = 'Multitool',
     rarity = 'uncommon',
     weight = 400,
@@ -313,14 +173,6 @@ return {
     close = true,
     description = 'An oxy-acetylene cutting torch that slices through catalytic converters and AC units in seconds.',
 },
-['brick'] = {
-    label = 'Brick',
-    rarity = 'common',
-    weight = 2000,
-    stack = true,
-    close = true,
-    description = 'A heavy clay brick. Wedge it on a gas pedal to send a car running.',
-},
 ['porch_package'] = {
     label = 'Porch Package',
     rarity = 'uncommon',
@@ -344,6 +196,7 @@ return {
     server = { export = 'sd-pettycrime.useMail_package' },
 },
 ['skimmer'] = {
+    grid = { 2, 1 },
     label = 'Card Skimmer',
     rarity = 'rare',
     weight = 250,
@@ -352,6 +205,7 @@ return {
     description = 'Install on an ATM, then slot in a USB to record card data. Wears out the longer it runs.',
 },
 ['atm_skimmer_usb'] = {
+    grid = { 2, 1 },
     label = 'Card Data USB',
     rarity = 'uncommon',
     weight = 50,
@@ -378,71 +232,9 @@ return {
     description = 'A sawn-off catalytic converter, packed with precious metals and worth a fortune to the right buyer.',
 },
     
-    ["ttt_fake_id"] = {
-        label = "Innocent ID Card",
-        rarity = 'rare',
-        weight = 50,
-        stack = false,
-        close = true,
-        consume = 1,
-        description = "Shows as innocent when tested. Single use. Traitor equipment.",
-        client = {
-            image = "ttt_fake_id.png",
-        },
-        server = {
-            export = 'sd-ttt.useTtt_fake_id'
-        }
-    },
     
-    ["ttt_flare_gun"] = {
-        label = "Flare Gun",
-        rarity = 'rare',
-        grid = { 2, 2 },
-        weight = 400,
-        stack = false,
-        close = true,
-        consume = 0,
-        description = "Burns corpses to hide evidence. Single shot. Traitor equipment.",
-        client = {
-            image = "ttt_flare_gun.png",
-        },
-        server = {
-            export = 'sd-ttt.useTtt_flare_gun'
-        }
-    },
     
-    ["ttt_poison_smoke"] = {
-        label = "Poison Smoke Grenade",
-        rarity = 'epic',
-        weight = 300,
-        stack = true,
-        close = true,
-        consume = 1,
-        description = "Toxic gas grenade that damages over time. Area denial weapon. Traitor equipment.",
-        client = {
-            image = "ttt_poison_smoke.png",
-        },
-        server = {
-            export = 'sd-ttt.useTtt_poison_smoke'
-        }
-    },
     
-    ["ttt_dna_scanner"] = {
-        label = "DNA Scanner",
-        rarity = 'rare',
-        grid = { 2, 1 },
-        weight = 200,
-        stack = false,
-        close = true,
-        consume = 0,
-        description = "Scan corpses to find the killer's last location. Detective equipment.",
-        client = {
-            image = "ttt_dna_scanner.png",
-        },
-        server = {
-            export = 'sd-ttt.useTtt_dna_scanner'
-        }
-    },
 
     ['sprunk'] = {
         grid = { 1, 1 },
@@ -472,11 +264,13 @@ return {
     },
 
     ['garbage'] = {
+        grid = { 2, 1 },
         label = 'Garbage',
         rarity = 'common',
     },
 
     ["bands"] = {
+        grid = { 1, 1 },
         label = "Band Of Notes",
         rarity = 'uncommon',
         weight = 100,
@@ -489,18 +283,6 @@ return {
         }
     },
     
-    ["rolls"] = {
-        label = "Roll Of Small Notes",
-        rarity = 'common',
-        weight = 100,
-        stack = true,
-        close = false,
-        description = "A roll of small notes..",
-        consume = 0,
-        client = {
-            image = "rolls.png",
-        }
-    },
 
     ["fleeca_case"] = {
         label = "Fleeca Bank Case",
@@ -618,80 +400,10 @@ return {
         }
     },
 
-    ['hunting_bait_1'] = {
-        label = 'Basic Bait',
-        rarity = 'common',
-        weight = 150,
-        stack = true,
-        close = true,
-        description = 'Simple grain mixture - takes 3-5 minutes to attract nearby wildlife',
-        client = {
-            image = 'hunting_bait_1.png',
-        },
-        server = {
-            export = 'sd-civjobs.useHuntingBait'
-        }
-    },
     
-    ['hunting_bait_2'] = {
-        label = 'Scented Bait',
-        rarity = 'common',
-        weight = 200,
-        stack = true,
-        close = true,
-        description = 'Aromatic blend with natural scents - attracts animals in 2-4 minutes',
-        client = {
-            image = 'hunting_bait_2.png',
-        },
-        server = {
-            export = 'sd-civjobs.useHuntingBait'
-        }
-    },
     
-    ['hunting_bait_3'] = {
-        label = 'Premium Bait',
-        rarity = 'uncommon',
-        weight = 250,
-        stack = true,
-        close = true,
-        description = 'Enhanced formula with pheromones - draws wildlife within 1-3 minutes',
-        client = {
-            image = 'hunting_bait_3.png',
-        },
-        server = {
-            export = 'sd-civjobs.useHuntingBait'
-        }
-    },
     
-    ['hunting_bait_4'] = {
-        label = 'Professional Bait',
-        rarity = 'uncommon',
-        weight = 300,
-        stack = true,
-        close = true,
-        description = 'Concentrated attractant blend - animals respond in 30-90 seconds',
-        client = {
-            image = 'hunting_bait_4.png',
-        },
-        server = {
-            export = 'sd-civjobs.useHuntingBait'
-        }
-    },
     
-    ['hunting_bait_5'] = {
-        label = 'Master Hunter Bait',
-        rarity = 'rare',
-        weight = 350,
-        stack = true,
-        close = true,
-        description = 'Irresistible expert formula - instant attraction within 15-45 seconds',
-        client = {
-            image = 'hunting_bait_5.png',
-        },
-        server = {
-            export = 'sd-civjobs.useHuntingBait'
-        }
-    },
     
     -- Deer Carcass Items (3 tiers)
     ['carcass_1'] = {
@@ -813,17 +525,6 @@ return {
         }
     },
     
-    ['mtlionfang'] = {
-        label = 'Mountain Lion Fangs',
-        rarity = 'rare',
-        weight = 150,
-        stack = true,
-        close = true,
-        description = 'Sharp predator fangs - prized collector item',
-        client = {
-            image = 'mtlionfang.png',
-        }
-    },
     
     ['coyotepelt'] = {
         label = 'Coyote Pelt',
@@ -852,16 +553,9 @@ return {
     },
     
 
-    ['paperbag'] = {
-        label = 'Paper Bag',
-        rarity = 'common',
-        weight = 1,
-        stack = false,
-        close = false,
-        consume = 0
-    },
 
     ['panties'] = {
+        grid = { 2, 1 },
         label = 'Knickers',
         rarity = 'common',
         weight = 10,
@@ -1117,6 +811,7 @@ return {
     },
 
     ['phone_powerbank'] = {
+        grid = { 2, 1 },
         label = 'Power Bank',
         rarity = 'uncommon',
         weight = 250,
@@ -1128,6 +823,7 @@ return {
 
     -- Using it latches charging on, using it again latches it off.
     ['phone_cable'] = {
+        grid = { 1, 1 },
         label = 'Charging Cable',
         rarity = 'common',
         weight = 80,
@@ -1137,18 +833,6 @@ return {
         server = { export = 'sd-phone.usePhone_cable' },
     },
 
-    ['mustard'] = {
-        label = 'Mustard',
-        rarity = 'common',
-        weight = 500,
-        client = {
-            status = { hunger = 25000, thirst = 25000 },
-            anim = { dict = 'mp_player_intdrink', clip = 'loop_bottle' },
-            prop = { model = `prop_food_mustard`, pos = vec3(0.01, 0.0, -0.07), rot = vec3(1.0, 1.0, -1.5) },
-            usetime = 2500,
-            notification = 'You... drank mustard'
-        }
-    },
 
     ['water'] = {
         grid = { 1, 1 },
@@ -1178,11 +862,6 @@ return {
         }
     },
 
-    ['clothing'] = {
-        label = 'Clothing',
-        rarity = 'common',
-        consume = 0,
-    },
 
     ['money'] = {
         grid = { 1, 1 },
@@ -1191,6 +870,7 @@ return {
     },
 
     ['black_money'] = {
+        grid = { 1, 1 },
         label = 'Dirty Money',
         rarity = 'common',
     },
@@ -1300,275 +980,50 @@ return {
         }
     },
 
-    ['md_brokenjunk'] = {
-		label = 'Broken Junk',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_crushedcan'] = {
-		label = 'Crushed Can',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_lighter'] = {
-		label = 'Lighter',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_metalcan'] = {
-		label = 'Metal Can',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_nails'] = {
-		label = 'Nails',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_needle'] = {
-		label = 'Needle',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_nickle'] = {
-		label = 'Nickle',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_nut'] = {
-		label = 'Nut',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_oldshotgunshell'] = {
-		label = 'Old Shotgun Shell',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_paperclip'] = {
-		label = 'Paper Clip',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_pulltab'] = {
-		label = 'Pull Tab',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_quarter'] = {
-		label = 'Quarter',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_rustyball'] = {
-		label = 'Rusty Ball',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_rustyironball'] = {
-		label = 'Rusty Iron Ball',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_rustyjunk'] = {
-		label = 'Rusty Junk',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_rustynails'] = {
-		label = 'Rusty Nails',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_rustypliers'] = {
-		label = 'Rusty Pliers',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_rustyring'] = {
-		label = 'Rusty Ring',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_rustyscissors'] = {
-		label = 'Rusty Scissors',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_rustyscrewdriver'] = {
-		label = 'Rusty Screwdriver',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_rustyspring'] = {
-		label = 'Rusty Spring',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_screw'] = {
-		label = 'Screw',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_wheatpenny'] = {
-		label = 'Wheat Penny',
-		rarity = 'common',
-		weight = 25
-	},
 
-	['md_ancientcoin'] = {
-		label = 'Ancient Coin',
-		rarity = 'epic',
-		weight = 25
-	},
 
-	['md_blackwatch'] = {
-		label = 'Watch',
-		rarity = 'rare',
-		weight = 25
-	},
 
-	['md_coppernugget'] = {
-		label = 'Copper Nugget',
-		rarity = 'uncommon',
-		weight = 25
-	},
 
-	['md_diamondearings'] = {
-		label = 'Diamond Earings',
-		rarity = 'epic',
-		weight = 25
-	},
 
-	['md_diamondnecklace'] = {
-		label = 'Diamond Necklace',
-		rarity = 'epic',
-		weight = 25
-	},
 
-	['md_diamondring'] = {
-		label = 'Diamond Ring',
-		rarity = 'epic',
-		weight = 25
-	},
 
-	['md_earpod'] = {
-		label = 'Ear Pod',
-		rarity = 'uncommon',
-		weight = 25
-	},
 
-	['md_golddollar'] = {
-		label = 'Gold Dollar',
-		rarity = 'rare',
-		weight = 25
-	},
 
-	['md_goldearings'] = {
-		label = 'Gold Earings',
-		rarity = 'rare',
-		weight = 25
-	},
 
-	['md_goldnecklace'] = {
-		label = 'Gold Necklace',
-		rarity = 'rare',
-		weight = 25
-	},
 
-	['md_goldnugget'] = {
-		label = 'Gold Nugget',
-		rarity = 'rare',
-		weight = 25
-	},
 
-	['md_goldounce'] = {
-		label = '1oz Gold Bar',
-		rarity = 'epic',
-		weight = 25
-	},
 
-	['md_goldring'] = {
-		label = 'Gold Ring',
-		rarity = 'rare',
-		weight = 25
-	},
 
-	['md_halfdollar'] = {
-		label = 'Half Dollar',
-		rarity = 'uncommon',
-		weight = 25
-	},
 
-	['md_ironnugget'] = {
-		label = 'Iron Nugget',
-		rarity = 'uncommon',
-		weight = 25
-	},
 
-	['md_platinumnugget'] = {
-		label = 'Platinum Nugget',
-		rarity = 'epic',
-		weight = 25
-	},
 
-	['md_presidentialwatch'] = {
-		label = 'Presidential Watch',
-		rarity = 'legendary',
-		weight = 25
-	},
 
-	['md_relicrevolver'] = {
-		label = 'Relic Revolver',
-		rarity = 'legendary',
-		weight = 25
-	},
 
-	['md_silverdime'] = {
-		label = 'Silver Dime',
-		rarity = 'uncommon',
-		weight = 25
-	},
 
-	['md_silverearings'] = {
-		label = 'Silver Earings',
-		rarity = 'uncommon',
-		weight = 25
-	},
 
-	['md_silverounce'] = {
-		label = '1oz Silver Bar',
-		rarity = 'rare',
-		weight = 25
-	},
 
-	['md_silverring'] = {
-		label = 'Silver Ring',
-		rarity = 'uncommon',
-		weight = 25
-	},
 
     ['driver_license'] = {
         grid = { 1, 1 },
@@ -1583,197 +1038,28 @@ return {
     },
 
     ['lawyerpass'] = {
+        grid = { 2, 1 },
         label = 'Lawyer Pass',
         rarity = 'uncommon',
     },
 
-    ["bee-smoker"] = {
-        label       = "Bee Smoker",
-        rarity = 'uncommon',
-        grid = { 2, 2 },
-        weight      = 1500,
-        stack       = false,
-        description = "A handheld smoker used to calm bees, making bee management safer and easier.",
-        consume     = 0,
-        client = {
-            image = "bee-smoker.png",
-        }
-    },
 
-    ["bee-hive"] = {
-        label = "Bee Hive",
-        rarity = 'uncommon',
-        grid = { 2, 2 },
-        weight = 1000,
-        stack = false,
-        close = true,
-        description = "",
-        consume = 0,
-        client = {
-            image = "bee-hive.png",
-        },
-        server = {
-            export = 'sd-beekeeping.useBee-hive',
-        }
-    },
         
     -- Bee Honey (Basic)
-    ["bee-honey"] = {
-        label = "Bee Honey",
-        rarity = 'common',
-        weight = 1000,
-        stack = true,
-        close = true,
-        description = "Pure honey harvested directly from the hive, rich in natural sweetness.",
-        consume = 0,
-        client = {
-            image = "bee-honey.png",
-        }
-    },
     
     -- Chiliad Honey
-    ["chiliad-honey"] = {
-        label = "Chiliad Honey",
-        rarity = 'uncommon',
-        weight = 1000,
-        stack = true,
-        close = true,
-        description = "A robust honey infused with the essence of Chiliad's wild flora.",
-        consume = 0,
-        client = {
-            image = "chiliad-honey.png",
-        }
-    },
     
     -- Green Hills Honey
-    ["green-hills-honey"] = {
-        label = "Green Hills Honey",
-        rarity = 'uncommon',
-        weight = 1000,
-        stack = true,
-        close = true,
-        description = "Delicate honey crafted from the abundant clover fields of Green Hills.",
-        consume = 0,
-        client = {
-            image = "green-hills-honey.png",
-        }
-    },
     
     -- Alamo Honey
-    ["alamo-honey"] = {
-        label = "Alamo Honey",
-        rarity = 'rare',
-        weight = 1000,
-        stack = true,
-        close = true,
-        description = "Exquisite honey sourced from the serene Alamo Grove, known for its unique taste.",
-        consume = 0,
-        client = {
-            image = "alamo-honey.png",
-        }
-    },
     
     -- Bee Wax
-    ["bee-wax"] = {
-        label = "Bee Wax",
-        rarity = 'common',
-        weight = 500,
-        stack = true,
-        close = true,
-        description = "Versatile beeswax, perfect for crafting candles, cosmetics, and artisanal goods.",
-        consume = 0,
-        client = {
-            image = "bee-wax.png",
-        }
-    },
         
-    ["bee-house"] = {
-        label = "Bee House",
-        rarity = 'uncommon',
-        grid = { 2, 2 },
-        weight = 1000,
-        stack = false,
-        close = true,
-        description = "",
-        consume = 0,
-        client = {
-            image = "bee-house.png",
-        },
-        server = {
-            export = 'sd-beekeeping.useBee-house',
-        }
-    },
         
-    ["bee-queen"] = {
-        label = "Bee Queen",
-        rarity = 'rare',
-        weight = 1000,
-        stack = true,
-        close = true,
-        description = "",
-        consume = 0,
-        client = {
-            image = "bee-queen.png",
-        }
-    },
     
-    ["bee-worker"] = {
-        label = "Worker Bee",
-        rarity = 'common',
-        weight = 1000,
-        stack = true,
-        close = true,
-        description = "",
-        consume = 0,
-        client = {
-            image = "bee-worker.png",
-        }
-    },
     
-    ["thymol"] = {
-        label = "Thymol",
-        rarity = 'uncommon',
-        weight = 500,
-        stack = true,
-        close = true,
-        description = "A natural treatment derived from thyme oil, effective in combating hive infections and supporting bee health.",
-        consume = 0,
-        client = {
-            image = "thymol.png",
-        }
-    },
 
-    ["yachtcodes"] = {
-        label = "Yacht Access Codes",
-        rarity = 'epic',
-        weight = 200,
-        stack = false,
-        close = true,
-        description = "The first half of codes for the Yacht",
-        consume = 0,
-        client = {
-            image = "yachtcodes.png",
-        },
-        server = {
-            export = 'sd-yacht.useYachtcodes',
-        }
-    },
     
-    ["casinocodes"] = {
-        label = "Casino Access Codes",
-        rarity = 'epic',
-        weight = 200,
-        stack = false,
-        close = true,
-        description = "The first half of codes for the Casino",
-        consume = 0,
-        client = {
-            image = "casinocodes.png",
-        },
-        server = {
-            export = 'sd-yacht.useCasinocodes',
-        }
-    },
     
     ["secured_safe"] = {
         label = "Safe",
@@ -1805,6 +1091,7 @@ return {
     },
     
     ["default_gateway_override"] = {
+        grid = { 2, 1 },
         label = "Gateway Override",
         rarity = 'rare',
         weight = 200,
@@ -1818,6 +1105,7 @@ return {
     },
 
     ['prescription'] = {
+        grid = { 2, 1 },
 		label = 'Prescription',
 		rarity = 'common',
 		weight = 300,
@@ -1826,6 +1114,7 @@ return {
 		description = "A piece of paper used for pharmacies"
 	},
 	['prescriptionpad'] = {
+	    grid = { 2, 1 },
 		label = 'Prescription Pad',
 		rarity = 'uncommon',
 		weight = 300,
@@ -1875,34 +1164,21 @@ return {
         }
     },
 
-    ['radiocell'] = {
-        label = 'AAA Cells',
-        rarity = 'common',
-        weight = 1000,
-        stack = true,
-        allowArmed = true,
-        client = {
-            event = 'mm_radio:client:recharge'
-        }
-    },
 
     ['advancedlockpick'] = {
+        grid = { 2, 1 },
         label = 'Advanced Lockpick',
         rarity = 'uncommon',
         weight = 500,
     },
 
     ['screwdriverset'] = {
+        grid = { 2, 2 },
         label = 'Screwdriver Set',
         rarity = 'common',
         weight = 500,
     },
 
-    ['electronickit'] = {
-        label = 'Electronic Kit',
-        rarity = 'uncommon',
-        weight = 500,
-    },
 
     ['cleaningkit'] = {
         grid = { 1, 1 },
@@ -1926,12 +1202,14 @@ return {
     },
 
     ['diamond_ring'] = {
+        grid = { 1, 1 },
         label = 'Diamond',
         rarity = 'epic',
         weight = 1500,
     },
 
     ['rolex'] = {
+        grid = { 1, 1 },
         label = 'Golden Watch',
         rarity = 'rare',
         weight = 1500,
@@ -1945,18 +1223,21 @@ return {
     },
 
     ['goldchain'] = {
+        grid = { 1, 1 },
         label = 'Golden Chain',
         rarity = 'rare',
         weight = 1500,
     },
 
     ['crack_baggy'] = {
+        grid = { 2, 1 },
         label = 'Crack Baggy',
         rarity = 'uncommon',
         weight = 100,
     },
 
     ['cokebaggy'] = {
+        grid = { 2, 1 },
         label = 'Bag of Coke',
         rarity = 'uncommon',
         weight = 100,
@@ -1970,96 +1251,112 @@ return {
     },
 
     ['coke_small_brick'] = {
+        grid = { 2, 1 },
         label = 'Coke Package',
         rarity = 'uncommon',
         weight = 1000,
     },
 
     ['xtcbaggy'] = {
+        grid = { 2, 1 },
         label = 'Bag of Ecstasy',
         rarity = 'uncommon',
         weight = 100,
     },
 
     ['meth'] = {
+        grid = { 2, 1 },
         label = 'Methamphetamine',
         rarity = 'uncommon',
         weight = 100,
     },
 
     ['oxy'] = {
+        grid = { 1, 1 },
         label = 'Oxycodone',
         rarity = 'uncommon',
         weight = 100,
     },
 
     ['weed_ak47'] = {
+        grid = { 2, 1 },
         label = 'AK47 2g',
         rarity = 'common',
         weight = 200,
     },
 
     ['weed_ak47_seed'] = {
+        grid = { 1, 1 },
         label = 'AK47 Seed',
         rarity = 'common',
         weight = 1,
     },
 
     ['weed_skunk'] = {
+        grid = { 2, 1 },
         label = 'Skunk 2g',
         rarity = 'common',
         weight = 200,
     },
 
     ['weed_skunk_seed'] = {
+        grid = { 1, 1 },
         label = 'Skunk Seed',
         rarity = 'common',
         weight = 1,
     },
 
     ['weed_amnesia'] = {
+        grid = { 2, 1 },
         label = 'Amnesia 2g',
         rarity = 'common',
         weight = 200,
     },
 
     ['weed_amnesia_seed'] = {
+        grid = { 1, 1 },
         label = 'Amnesia Seed',
         rarity = 'common',
         weight = 1,
     },
 
     ['weed_og-kush'] = {
+        grid = { 2, 1 },
         label = 'OGKush 2g',
         rarity = 'common',
         weight = 200,
     },
 
     ['weed_og-kush_seed'] = {
+        grid = { 1, 1 },
         label = 'OGKush Seed',
         rarity = 'common',
         weight = 1,
     },
 
     ['weed_white-widow'] = {
+        grid = { 2, 1 },
         label = 'OGKush 2g',
         rarity = 'common',
         weight = 200,
     },
 
     ['weed_white-widow_seed'] = {
+        grid = { 1, 1 },
         label = 'White Widow Seed',
         rarity = 'common',
         weight = 1,
     },
 
     ['weed_purple-haze'] = {
+        grid = { 2, 1 },
         label = 'Purple Haze 2g',
         rarity = 'common',
         weight = 200,
     },
 
     ['weed_purple-haze_seed'] = {
+        grid = { 1, 1 },
         label = 'Purple Haze Seed',
         rarity = 'common',
         weight = 1,
@@ -2115,24 +1412,28 @@ return {
     },
 
     ['weed_nutrition'] = {
+        grid = { 2, 1 },
         label = 'Plant Fertilizer',
         rarity = 'common',
         weight = 2000,
     },
 
     ['joint'] = {
+        grid = { 1, 1 },
         label = 'Joint',
         rarity = 'common',
         weight = 200,
     },
 
     ['rolling_paper'] = {
+        grid = { 1, 1 },
         label = 'Rolling Paper',
         rarity = 'common',
         weight = 0,
     },
 
     ['empty_weed_bag'] = {
+        grid = { 2, 1 },
         label = 'Empty Weed Bag',
         rarity = 'common',
         weight = 0,
@@ -2153,96 +1454,112 @@ return {
     },
 
     ['painkillers'] = {
+        grid = { 1, 1 },
         label = 'Painkillers',
         rarity = 'common',
         weight = 400,
     },
 
     ['firework1'] = {
+        grid = { 2, 1 },
         label = '2Brothers',
         rarity = 'uncommon',
         weight = 1000,
     },
 
     ['firework2'] = {
+        grid = { 2, 1 },
         label = 'Poppelers',
         rarity = 'uncommon',
         weight = 1000,
     },
 
     ['firework3'] = {
+        grid = { 2, 1 },
         label = 'WipeOut',
         rarity = 'uncommon',
         weight = 1000,
     },
 
     ['firework4'] = {
+        grid = { 2, 1 },
         label = 'Weeping Willow',
         rarity = 'uncommon',
         weight = 1000,
     },
 
     ['steel'] = {
+        grid = { 1, 1 },
         label = 'Steel',
         rarity = 'common',
         weight = 100,
     },
 
     ['rubber'] = {
+        grid = { 1, 1 },
         label = 'Rubber',
         rarity = 'common',
         weight = 100,
     },
 
     ['metalscrap'] = {
+        grid = { 1, 1 },
         label = 'Metal Scrap',
         rarity = 'common',
         weight = 100,
     },
 
     ['iron'] = {
+        grid = { 1, 1 },
         label = 'Iron',
         rarity = 'common',
         weight = 100,
     },
 
     ['copper'] = {
+        grid = { 1, 1 },
         label = 'Copper',
         rarity = 'common',
         weight = 100,
     },
 
     ['aluminium'] = {
+        grid = { 1, 1 },
         label = 'Aluminium',
         rarity = 'common',
         weight = 100,
     },
 
     ['plastic'] = {
+        grid = { 1, 1 },
         label = 'Plastic',
         rarity = 'common',
         weight = 100,
     },
 
     ['glass'] = {
+        grid = { 1, 1 },
         label = 'Glass',
         rarity = 'common',
         weight = 100,
     },
 
     ['gatecrack'] = {
+        grid = { 2, 1 },
         label = 'Gatecrack',
         rarity = 'rare',
         weight = 1000,
     },
 
     ['cryptostick'] = {
+        grid = { 2, 1 },
         label = 'Crypto Stick',
         rarity = 'rare',
         weight = 100,
     },
 
     ['trojan_usb'] = {
+        grid = { 2, 1 },
         label = 'Trojan USB',
         rarity = 'rare',
         weight = 100,
@@ -2263,12 +1580,14 @@ return {
     },
 
     ['security_card_01'] = {
+        grid = { 2, 1 },
         label = 'Security Card A',
         rarity = 'rare',
         weight = 100,
     },
 
     ['security_card_02'] = {
+        grid = { 2, 1 },
         label = 'Security Card B',
         rarity = 'rare',
         weight = 100,
@@ -2282,23 +1601,12 @@ return {
     },
 
     ['thermite'] = {
+        grid = { 2, 2 },
         label = 'Thermite',
         rarity = 'epic',
         weight = 1000,
     },
 
-    ["flower"] = {
-        label = "Fresh Flower",
-        rarity = 'common',
-        weight = 50,
-        stack = true,
-        close = true,
-        consume = 0,
-        description = "A beautiful fresh flower picked from the garden. Can be used for decoration or sold.",
-        client = {
-            image = "flower.png",
-        }
-    },
 
 -- Add this to your regular items.lua (or replace if they already exist)
 ["diving_gear_1"] = {
@@ -2455,82 +1763,12 @@ return {
         }
     },
 
-    ["rose"] = {
-        label = "Rose",
-        rarity = 'common',
-        weight = 40,
-        stack = true,
-        close = true,
-        consume = 0,
-        description = "A beautiful red rose with a sweet fragrance. A classic symbol of love and romance.",
-        client = {
-            image = "flowers.png",
-        }
-    },
     
-    ["tulip"] = {
-        label = "Tulip",
-        rarity = 'common',
-        weight = 35,
-        stack = true,
-        close = true,
-        consume = 0,
-        description = "A colorful tulip flower. Perfect for brightening up any space.",
-        client = {
-            image = "flowers.png",
-        }
-    },
     
-    ["sunflower"] = {
-        label = "Sunflower",
-        rarity = 'common',
-        weight = 60,
-        stack = true,
-        close = true,
-        consume = 0,
-        description = "A large, bright sunflower that always faces the sun. Symbol of happiness and positivity.",
-        client = {
-            image = "flowers.png",
-        }
-    },
     
-    ["lily"] = {
-        label = "Lily",
-        rarity = 'common',
-        weight = 45,
-        stack = true,
-        close = true,
-        consume = 0,
-        description = "An elegant lily flower with a delicate fragrance. Often used in formal arrangements.",
-        client = {
-            image = "flowers.png",
-        }
-    },
     
-    ["orchid"] = {
-        label = "Orchid",
-        rarity = 'rare',
-        weight = 30,
-        stack = true,
-        close = true,
-        consume = 0,
-        description = "A rare and exotic orchid. Highly prized by collectors and florists.",
-        client = {
-            image = "flowers.png",
-        }
-    },
 
-    ['antipatharia_coral'] = {
-        label = 'Antipatharia',
-        rarity = 'rare',
-        weight = 1000,
-    },
 
-    ['dendrogyra_coral'] = {
-        label = 'Dendrogyra',
-        rarity = 'rare',
-        weight = 1000,
-    },
 
     ['jerry_can'] = {
         label = 'Jerrycan',
@@ -2554,18 +1792,7 @@ return {
         weight = 500,
     },
 
-    ['grape'] = {
-        label = 'Grape',
-        rarity = 'common',
-        weight = 10,
-    },
 
-    ['grapejuice'] = {
-        client = { status = { thirst = 200000 }, anim = 'drinking', prop = 'juice', usetime = 2500, cancel = true },
-        label = 'Suco de Uva',
-        rarity = 'common',
-        weight = 200,
-    },
 
     ['coffee'] = {
         client = { status = { thirst = 200000 }, anim = 'drinking', prop = 'coffee', usetime = 2500, cancel = true },
@@ -2592,6 +1819,7 @@ return {
     },
 
     ['beer'] = {
+        grid = { 2, 1 },
         client = { status = { thirst = 200000 }, anim = 'drinking', prop = 'beer', usetime = 2500, cancel = true },
         label = 'Cerveja',
         rarity = 'common',
@@ -2614,6 +1842,7 @@ return {
     },
 
     ['lighter'] = {
+        grid = { 1, 1 },
         label = 'Lighter',
         rarity = 'common',
         weight = 200,
@@ -2626,25 +1855,23 @@ return {
         weight = 800,
     },
 
-    ['stickynote'] = {
-        label = 'Sticky Note',
-        rarity = 'common',
-        weight = 0,
-    },
 
     ['empty_evidence_bag'] = {
+        grid = { 2, 1 },
         label = 'Empty Evidence Bag',
         rarity = 'common',
         weight = 200,
     },
 
     ['filled_evidence_bag'] = {
+        grid = { 2, 1 },
         label = 'Filled Evidence Bag',
         rarity = 'common',
         weight = 200,
     },
 
     ['harness'] = {
+        grid = { 2, 2 },
         label = 'Harness',
         rarity = 'uncommon',
         clothing = 'torso',
@@ -2652,6 +1879,7 @@ return {
     },
 
     ['flat_cap'] = {
+        grid = { 2, 1 },
         label = 'Flat Cap',
         rarity = 'common',
         clothing = 'hat',
@@ -2666,6 +1894,7 @@ return {
     },
 
     ['ski_mask'] = {
+        grid = { 2, 1 },
         label = 'Ski Mask',
         rarity = 'uncommon',
         clothing = 'mask',
@@ -2680,6 +1909,7 @@ return {
     },
 
     ['work_gloves'] = {
+        grid = { 2, 1 },
         label = 'Work Gloves',
         rarity = 'common',
         clothing = 'gloves',
@@ -2736,6 +1966,7 @@ return {
 
 -- Crafting Blueprints
 ["blueprint_advancedlockpick"] = {
+    grid = { 2, 1 },
     label = "Advanced Lockpick Blueprint",
     rarity = 'rare',
     weight = 100,
@@ -2748,101 +1979,17 @@ return {
     }
 },
 
-    ['deaddrop_item_1'] = {
-        label = 'Dead Drop Item 1 (Alpha)',
-        rarity = 'rare',
-        weight = 100,
-        consume = 0,
-        client = { export = 'sd-deaddrop.openLootGrid' },
-    },
 
-    ['deaddrop_item_2'] = {
-        label = 'Dead Drop Item 2 (Bravo)',
-        rarity = 'rare',
-        weight = 100,
-        consume = 0,
-        client = { export = 'sd-deaddrop.openLootGrid' },
-    },
 
-    ['deaddrop_item_3'] = {
-        label = 'Dead Drop Item 3 (Charlie)',
-        rarity = 'rare',
-        weight = 100,
-        consume = 0,
-        client = { export = 'sd-deaddrop.openLootGrid' },
-    },
 
-    ['deaddrop_item_4'] = {
-        label = 'Dead Drop Item 4 (Delta)',
-        rarity = 'rare',
-        weight = 100,
-        consume = 0,
-        client = { export = 'sd-deaddrop.openLootGrid' },
-    },
 
-    ['deaddrop_item_5'] = {
-        label = 'Dead Drop Item 5 (Echo)',
-        rarity = 'rare',
-        weight = 100,
-        consume = 0,
-        client = { export = 'sd-deaddrop.openLootGrid' },
-    },
 
-    ['deaddrop_item_6'] = {
-        label = 'Dead Drop Item 6 (Foxtrot)',
-        rarity = 'rare',
-        weight = 100,
-        consume = 0,
-        client = { export = 'sd-deaddrop.openLootGrid' },
-    },
 
-    ['deaddrop_item_7'] = {
-        label = 'Dead Drop Item 7 (Golf)',
-        rarity = 'epic',
-        weight = 100,
-        consume = 0,
-        client = { export = 'sd-deaddrop.openLootGrid' },
-    },
 
-    ['deaddrop_item_8'] = {
-        label = 'Dead Drop Item 8 (Hotel)',
-        rarity = 'epic',
-        weight = 100,
-        consume = 0,
-        client = { export = 'sd-deaddrop.openLootGrid' },
-    },
 
-    ['deaddrop_item_9'] = {
-        label = 'Dead Drop Item 9 (India)',
-        rarity = 'epic',
-        weight = 100,
-        consume = 0,
-        client = { export = 'sd-deaddrop.openLootGrid' },
-    },
 
-    ['deaddrop_item_10'] = {
-        label = 'Dead Drop Item 10 (Juliett)',
-        rarity = 'epic',
-        weight = 100,
-        consume = 0,
-        client = { export = 'sd-deaddrop.openLootGrid' },
-    },
 
-    ['deaddrop_item_11'] = {
-        label = 'Dead Drop Item 11 (Kilo)',
-        rarity = 'legendary',
-        weight = 100,
-        consume = 0,
-        client = { export = 'sd-deaddrop.openLootGrid' },
-    },
 
-    ['deaddrop_item_12'] = {
-        label = 'Dead Drop Item 12 (Lima)',
-        rarity = 'legendary',
-        weight = 100,
-        consume = 0,
-        client = { export = 'sd-deaddrop.openLootGrid' },
-    },
 
     ['merryweather_tablet'] = {
         label = 'Merryweather Tablet',
@@ -2863,45 +2010,14 @@ return {
         },
     },
 
-    ['deaddrop_usb_1'] = {
-        label = 'Intrusion USB - Runner Kit',
-        rarity = 'rare',
-        weight = 50,
-        stack = false,
-        description = 'A scuffed USB carrying two intrusion daemons - net-maze.exe and highway-evade.exe. Provides both to the terminal while it sits in the tablet\'s USB storage.',
-        client = { image = 'deaddrop_usb_1.png' },
-    },
 
-    ['deaddrop_usb_2'] = {
-        label = 'Intrusion USB - Breaker Kit',
-        rarity = 'rare',
-        weight = 50,
-        stack = false,
-        description = 'A scuffed USB carrying two intrusion daemons - node-grab.exe and code-inject.exe. Provides both to the terminal while it sits in the tablet\'s USB storage.',
-        client = { image = 'deaddrop_usb_2.png' },
-    },
 
-    ['deaddrop_usb_3'] = {
-        label = 'Intrusion USB - Decrypt Suite',
-        rarity = 'epic',
-        weight = 50,
-        stack = false,
-        description = 'A sealed USB carrying three heavier daemons - cipher-lock.exe, sig-replay.exe and pipe-route.exe. Provides all three to the terminal while it sits in the tablet\'s USB storage.',
-        client = { image = 'deaddrop_usb_3.png' },
-    },
 
-    ['deaddrop_usb_4'] = {
-        label = 'Intrusion USB - Black ICE Suite',
-        rarity = 'legendary',
-        weight = 50,
-        stack = false,
-        description = 'A blacked-out USB carrying three elite daemons - data-worm.exe, fw-defense.exe and ice-break.exe. Provides all three to the terminal while it sits in the tablet\'s USB storage.',
-        client = { image = 'deaddrop_usb_4.png' },
-    },
 
     -- frp_mdt: printed record (REPORTS.EXE / CASES.EXE Print button). The
     -- metadata carries the frozen record snapshot; using it opens the document.
     ['mdt_document'] = {
+        grid = { 2, 1 },
         label = 'Printed Document',
         rarity = 'common',
         weight = 50,
@@ -2949,27 +2065,7 @@ return {
         },
     },
 
-    ['race_timer'] = {
-        label = 'Race Timer',
-        rarity = 'uncommon',
-        weight = 250,
-        stack = false,
-        close = true,
-        consume = 0,
-        description = 'A little black plastic stopwatch. Shows your last run, and whatever name you etched on it.',
-        client = {
-            export = 'frp_racing.useTimer',
-        },
-    },
 
-    ['turnin_slip'] = {
-        label = 'Recycling Turn-In Slip',
-        rarity = 'common',
-        weight = 100,
-        stack = true,
-        close = false,
-        description = 'Issued after dropping off a recyclable box. Can be redeemed for rewards.',
-    },
 
     ['backpack_fashion'] = {
         label = 'Mochila Básica',
@@ -3140,73 +2236,73 @@ return {
     -- ---------------------------------------------------------------------------------------
     -- Raw materials (also what scrapping a project returns)
     -- ---------------------------------------------------------------------------------------
-    ['steel_scrap']     = { label = 'Scrap Steel',      weight = 400, stack = true, close = false, description = 'Cut-up body steel. Worth more melted than it is bolted to anything.' },
-    ['aluminium_scrap'] = { label = 'Scrap Aluminium',  weight = 220, stack = true, close = false, description = 'Light alloy offcuts — heads, wheels, the odd intake manifold.' },
-    ['copper_wire']     = { label = 'Copper Wire',      weight = 120, stack = true, close = false, description = 'Stripped loom copper, coiled by hand.' },
-    ['rubber_scrap']    = { label = 'Scrap Rubber',     weight = 180, stack = true, close = false, description = 'Perished hoses and dead tyre carcass.' },
-    ['carbon_offcut']   = { label = 'Carbon Offcut',    weight = 90,  stack = true, close = false, description = 'Trimmings from a carbon panel. Sharp, light, and expensive.' },
-    ['steel_stock']     = { label = 'Steel Stock',      weight = 900, stack = true, close = false, description = 'Fresh box section for cutting frame repair patches out of.' },
-    ['welding_rod']     = { label = 'Welding Rod',      weight = 150, stack = true, close = false, description = 'Filler rod. Consumable, and you will always want one more.' },
-    ['cutting_disc']    = { label = 'Cutting Disc',     weight = 100, stack = true, close = false, description = 'Thin abrasive disc for an angle grinder. Lasts about one arch.' },
+    ['steel_scrap']     = { grid = { 1, 1 }, label = 'Scrap Steel',      weight = 400, stack = true, close = false, description = 'Cut-up body steel. Worth more melted than it is bolted to anything.' },
+    ['aluminium_scrap'] = { grid = { 1, 1 }, label = 'Scrap Aluminium',  weight = 220, stack = true, close = false, description = 'Light alloy offcuts — heads, wheels, the odd intake manifold.' },
+    ['copper_wire']     = { grid = { 1, 1 }, label = 'Copper Wire',      weight = 120, stack = true, close = false, description = 'Stripped loom copper, coiled by hand.' },
+    ['rubber_scrap']    = { grid = { 1, 1 }, label = 'Scrap Rubber',     weight = 180, stack = true, close = false, description = 'Perished hoses and dead tyre carcass.' },
+    ['carbon_offcut']   = { grid = { 1, 1 }, label = 'Carbon Offcut',    weight = 90,  stack = true, close = false, description = 'Trimmings from a carbon panel. Sharp, light, and expensive.' },
+    ['steel_stock']     = { grid = { 1, 1 }, label = 'Steel Stock',      weight = 900, stack = true, close = false, description = 'Fresh box section for cutting frame repair patches out of.' },
+    ['welding_rod']     = { grid = { 2, 1 }, label = 'Welding Rod',      weight = 150, stack = true, close = false, description = 'Filler rod. Consumable, and you will always want one more.' },
+    ['cutting_disc']    = { grid = { 2, 1 }, label = 'Cutting Disc',     weight = 100, stack = true, close = false, description = 'Thin abrasive disc for an angle grinder. Lasts about one arch.' },
 
     -- ---------------------------------------------------------------------------------------
     -- Chassis, suspension, brakes
     -- ---------------------------------------------------------------------------------------
-    ['suspension_kit']  = { label = 'Suspension Kit',   weight = 2400, stack = true, close = false, description = 'Struts, springs and bushes for one corner.' },
-    ['brake_kit']       = { label = 'Brake Kit',        weight = 1600, stack = true, close = false, description = 'Discs, pads and a caliper rebuild for one axle.' },
-    ['brake_fluid']     = { label = 'Brake Fluid',      weight = 500,  stack = true, close = false, description = 'DOT 4. Eats paint, so do not spill it on the car you just sprayed.' },
-    ['restored_wheel']  = { label = 'Restored Wheel',   weight = 8000, stack = true, close = false, description = 'A straightened rim with a fresh tyre on it, balanced and ready to hang.' },
-    ['lug_nut']         = { label = 'Lug Nut',          weight = 40,   stack = true, close = false, description = 'One wheel nut. You will need five per corner and you will lose one.' },
+    ['suspension_kit']  = { grid = { 3, 2 }, label = 'Suspension Kit',   weight = 2400, stack = true, close = false, description = 'Struts, springs and bushes for one corner.' },
+    ['brake_kit']       = { grid = { 2, 2 }, label = 'Brake Kit',        weight = 1600, stack = true, close = false, description = 'Discs, pads and a caliper rebuild for one axle.' },
+    ['brake_fluid']     = { grid = { 1, 1 }, label = 'Brake Fluid',      weight = 500,  stack = true, close = false, description = 'DOT 4. Eats paint, so do not spill it on the car you just sprayed.' },
+    ['restored_wheel']  = { grid = { 3, 2 }, label = 'Restored Wheel',   weight = 8000, stack = true, close = false, description = 'A straightened rim with a fresh tyre on it, balanced and ready to hang.' },
+    ['lug_nut']         = { grid = { 1, 1 }, label = 'Lug Nut',          weight = 40,   stack = true, close = false, description = 'One wheel nut. You will need five per corner and you will lose one.' },
 
     -- ---------------------------------------------------------------------------------------
     -- Engine and drivetrain
     -- ---------------------------------------------------------------------------------------
-    ['engine_block']    = { label = 'Engine Block',     weight = 30000, stack = true, close = false, description = 'A rebuilt short block on a stand. Do not try to carry two.' },
-    ['engine_mount']    = { label = 'Engine Mount',     weight = 700,   stack = true, close = false, description = 'Rubber and steel. The thing that stops the engine leaving the car.' },
-    ['cylinder_head']   = { label = 'Cylinder Head',    weight = 9000,  stack = true, close = false, description = 'Skimmed flat, valves lapped, ready to torque down.' },
-    ['head_gasket']     = { label = 'Head Gasket',      weight = 200,   stack = true, close = false, description = 'Multi-layer steel. Fit it once, fit it right.' },
-    ['head_bolt']       = { label = 'Head Bolt',        weight = 90,    stack = true, close = false, description = 'Torque-to-yield. Single use, no arguments.' },
-    ['timing_kit']      = { label = 'Timing Kit',       weight = 1200,  stack = true, close = false, description = 'Belt, tensioner and idlers. Cheaper than the valves it saves.' },
-    ['transmission']    = { label = 'Transmission',     weight = 22000, stack = true, close = false, description = 'A rebuilt gearbox, drained and sealed for transport.' },
-    ['gear_oil']        = { label = 'Gear Oil',         weight = 900,   stack = true, close = false, description = 'Heavy and foul-smelling. Everything about it is correct.' },
-    ['radiator']        = { label = 'Radiator',         weight = 3500,  stack = true, close = false, description = 'Recored and pressure-tested.' },
-    ['coolant_hose']    = { label = 'Coolant Hose',     weight = 250,   stack = true, close = false, description = 'Silicone hose in a length that is never quite the length you needed.' },
-    ['exhaust_section'] = { label = 'Exhaust Section',  weight = 4000,  stack = true, close = false, description = 'Mandrel-bent tubing, one section of a system.' },
-    ['exhaust_clamp']   = { label = 'Exhaust Clamp',    weight = 120,   stack = true, close = false, description = 'A band clamp. Cheap insurance against a drone you cannot find.' },
-    ['fuel_pump']       = { label = 'Fuel Pump',        weight = 1100,  stack = true, close = false, description = 'In-tank pump and sender assembly.' },
-    ['fuel_line']       = { label = 'Fuel Line',        weight = 300,   stack = true, close = false, description = 'Braided line, rated well past anything this engine will make.' },
-    ['car_battery']     = { label = 'Car Battery',      weight = 14000, stack = true, close = false, description = 'Charged and load-tested. The last thing you fit before it starts.' },
-    ['motor_oil']       = { label = 'Motor Oil',        weight = 1000,  stack = true, close = false, description = 'Five litres of the correct grade.' },
-    ['coolant']         = { label = 'Coolant',          weight = 1000,  stack = true, close = false, description = 'Pre-mixed. Bright enough to find on the floor when it leaks.' },
+    ['engine_block']    = { grid = { 3, 2 }, label = 'Engine Block',     weight = 30000, stack = true, close = false, description = 'A rebuilt short block on a stand. Do not try to carry two.' },
+    ['engine_mount']    = { grid = { 2, 2 }, label = 'Engine Mount',     weight = 700,   stack = true, close = false, description = 'Rubber and steel. The thing that stops the engine leaving the car.' },
+    ['cylinder_head']   = { grid = { 2, 2 }, label = 'Cylinder Head',    weight = 9000,  stack = true, close = false, description = 'Skimmed flat, valves lapped, ready to torque down.' },
+    ['head_gasket']     = { grid = { 2, 2 }, label = 'Head Gasket',      weight = 200,   stack = true, close = false, description = 'Multi-layer steel. Fit it once, fit it right.' },
+    ['head_bolt']       = { grid = { 1, 1 }, label = 'Head Bolt',        weight = 90,    stack = true, close = false, description = 'Torque-to-yield. Single use, no arguments.' },
+    ['timing_kit']      = { grid = { 2, 2 }, label = 'Timing Kit',       weight = 1200,  stack = true, close = false, description = 'Belt, tensioner and idlers. Cheaper than the valves it saves.' },
+    ['transmission']    = { grid = { 3, 2 }, label = 'Transmission',     weight = 22000, stack = true, close = false, description = 'A rebuilt gearbox, drained and sealed for transport.' },
+    ['gear_oil']        = { grid = { 1, 1 }, label = 'Gear Oil',         weight = 900,   stack = true, close = false, description = 'Heavy and foul-smelling. Everything about it is correct.' },
+    ['radiator']        = { grid = { 3, 2 }, label = 'Radiator',         weight = 3500,  stack = true, close = false, description = 'Recored and pressure-tested.' },
+    ['coolant_hose']    = { grid = { 2, 1 }, label = 'Coolant Hose',     weight = 250,   stack = true, close = false, description = 'Silicone hose in a length that is never quite the length you needed.' },
+    ['exhaust_section'] = { grid = { 2, 2 }, label = 'Exhaust Section',  weight = 4000,  stack = true, close = false, description = 'Mandrel-bent tubing, one section of a system.' },
+    ['exhaust_clamp']   = { grid = { 2, 1 }, label = 'Exhaust Clamp',    weight = 120,   stack = true, close = false, description = 'A band clamp. Cheap insurance against a drone you cannot find.' },
+    ['fuel_pump']       = { grid = { 2, 2 }, label = 'Fuel Pump',        weight = 1100,  stack = true, close = false, description = 'In-tank pump and sender assembly.' },
+    ['fuel_line']       = { grid = { 2, 1 }, label = 'Fuel Line',        weight = 300,   stack = true, close = false, description = 'Braided line, rated well past anything this engine will make.' },
+    ['car_battery']     = { grid = { 2, 2 }, label = 'Car Battery',      weight = 14000, stack = true, close = false, description = 'Charged and load-tested. The last thing you fit before it starts.' },
+    ['motor_oil']       = { grid = { 1, 1 }, label = 'Motor Oil',        weight = 1000,  stack = true, close = false, description = 'Five litres of the correct grade.' },
+    ['coolant']         = { grid = { 1, 1 }, label = 'Coolant',          weight = 1000,  stack = true, close = false, description = 'Pre-mixed. Bright enough to find on the floor when it leaks.' },
 
     -- ---------------------------------------------------------------------------------------
     -- Electrical
     -- ---------------------------------------------------------------------------------------
-    ['wiring_harness']  = { label = 'Wiring Harness',   weight = 3000, stack = true, close = false, description = 'A whole loom, labelled by somebody who cared. Rare and precious.' },
-    ['electrical_tape'] = { label = 'Electrical Tape',  weight = 80,   stack = true, close = false, description = 'Cloth tape, because the sticky kind turns to soup in an engine bay.' },
-    ['dash_cluster']    = { label = 'Dash Cluster',     weight = 2200, stack = true, close = false, description = 'Instrument binnacle with every bulb replaced.' },
-    ['headlight_set']   = { label = 'Headlight Set',    weight = 3000, stack = true, close = false, description = 'A matched pair, polished clear.' },
-    ['taillight_set']   = { label = 'Taillight Set',    weight = 2000, stack = true, close = false, description = 'A matched pair, no cracks, correct lenses.' },
+    ['wiring_harness']  = { grid = { 2, 2 }, label = 'Wiring Harness',   weight = 3000, stack = true, close = false, description = 'A whole loom, labelled by somebody who cared. Rare and precious.' },
+    ['electrical_tape'] = { grid = { 2, 1 }, label = 'Electrical Tape',  weight = 80,   stack = true, close = false, description = 'Cloth tape, because the sticky kind turns to soup in an engine bay.' },
+    ['dash_cluster']    = { grid = { 2, 2 }, label = 'Dash Cluster',     weight = 2200, stack = true, close = false, description = 'Instrument binnacle with every bulb replaced.' },
+    ['headlight_set']   = { grid = { 2, 2 }, label = 'Headlight Set',    weight = 3000, stack = true, close = false, description = 'A matched pair, polished clear.' },
+    ['taillight_set']   = { grid = { 2, 2 }, label = 'Taillight Set',    weight = 2000, stack = true, close = false, description = 'A matched pair, no cracks, correct lenses.' },
 
     -- ---------------------------------------------------------------------------------------
     -- Body, glass and paint
     -- ---------------------------------------------------------------------------------------
-    ['body_panel']      = { label = 'Body Panel',       weight = 7000, stack = true, close = false, description = 'A straight replacement panel. Getting it to line up is the hard part.' },
-    ['panel_bolt']      = { label = 'Panel Bolt',       weight = 40,   stack = true, close = false, description = 'One captive bolt with a shouldered washer.' },
-    ['door_hinge']      = { label = 'Door Hinge',       weight = 800,  stack = true, close = false, description = 'New pins and bushes, so the door stops dropping.' },
-    ['bumper_shell']    = { label = 'Bumper Shell',     weight = 5000, stack = true, close = false, description = 'Unpainted bumper skin, ready for prep.' },
-    ['widebody_arch']   = { label = 'Widebody Arch',    weight = 4000, stack = true, close = false, description = 'A moulded over-fender. Fitting it means cutting the wing you already own.' },
-    ['auto_glass']      = { label = 'Auto Glass',       weight = 6000, stack = true, close = false, description = 'Laminated glass cut to pattern. Handle with two hands.' },
-    ['urethane_tube']   = { label = 'Urethane Tube',    weight = 400,  stack = true, close = false, description = 'Glass bonding adhesive. One continuous bead or it leaks.' },
-    ['sandpaper']       = { label = 'Sandpaper',        weight = 60,   stack = true, close = false, description = 'Wet-and-dry sheets. Never enough of them.' },
-    ['body_filler']     = { label = 'Body Filler',      weight = 1200, stack = true, close = false, description = 'Two-part filler and hardener. A skim, not a sculpture.' },
-    ['primer_can']      = { label = 'Primer',           weight = 1400, stack = true, close = false, description = 'High-build primer. Grey, dull, and the reason the colour looks right.' },
-    ['paint_can']       = { label = 'Paint',            weight = 1400, stack = true, close = false, description = 'Base coat, mixed to whatever code you gave the shop.' },
-    ['clearcoat_can']   = { label = 'Clearcoat',        weight = 1400, stack = true, close = false, description = 'Two-pack clear. The shine is entirely this.' },
+    ['body_panel']      = { grid = { 3, 2 }, label = 'Body Panel',       weight = 7000, stack = true, close = false, description = 'A straight replacement panel. Getting it to line up is the hard part.' },
+    ['panel_bolt']      = { grid = { 1, 1 }, label = 'Panel Bolt',       weight = 40,   stack = true, close = false, description = 'One captive bolt with a shouldered washer.' },
+    ['door_hinge']      = { grid = { 2, 1 }, label = 'Door Hinge',       weight = 800,  stack = true, close = false, description = 'New pins and bushes, so the door stops dropping.' },
+    ['bumper_shell']    = { grid = { 3, 2 }, label = 'Bumper Shell',     weight = 5000, stack = true, close = false, description = 'Unpainted bumper skin, ready for prep.' },
+    ['widebody_arch']   = { grid = { 3, 2 }, label = 'Widebody Arch',    weight = 4000, stack = true, close = false, description = 'A moulded over-fender. Fitting it means cutting the wing you already own.' },
+    ['auto_glass']      = { grid = { 2, 2 }, label = 'Auto Glass',       weight = 6000, stack = true, close = false, description = 'Laminated glass cut to pattern. Handle with two hands.' },
+    ['urethane_tube']   = { grid = { 2, 1 }, label = 'Urethane Tube',    weight = 400,  stack = true, close = false, description = 'Glass bonding adhesive. One continuous bead or it leaks.' },
+    ['sandpaper']       = { grid = { 2, 1 }, label = 'Sandpaper',        weight = 60,   stack = true, close = false, description = 'Wet-and-dry sheets. Never enough of them.' },
+    ['body_filler']     = { grid = { 2, 1 }, label = 'Body Filler',      weight = 1200, stack = true, close = false, description = 'Two-part filler and hardener. A skim, not a sculpture.' },
+    ['primer_can']      = { grid = { 2, 2 }, label = 'Primer',           weight = 1400, stack = true, close = false, description = 'High-build primer. Grey, dull, and the reason the colour looks right.' },
+    ['paint_can']       = { grid = { 2, 2 }, label = 'Paint',            weight = 1400, stack = true, close = false, description = 'Base coat, mixed to whatever code you gave the shop.' },
+    ['clearcoat_can']   = { grid = { 2, 2 }, label = 'Clearcoat',        weight = 1400, stack = true, close = false, description = 'Two-pack clear. The shine is entirely this.' },
 
     -- ---------------------------------------------------------------------------------------
     -- Interior
     -- ---------------------------------------------------------------------------------------
-    ['seat_kit']        = { label = 'Seat Kit',         weight = 12000, stack = true, close = false, description = 'A retrimmed seat with new foam.' },
-    ['trim_set']        = { label = 'Trim Set',         weight = 4000,  stack = true, close = false, description = 'Door cards, sills and pillar trims, with most of the clips.' },
+    ['seat_kit']        = { grid = { 3, 2 }, label = 'Seat Kit',         weight = 12000, stack = true, close = false, description = 'A retrimmed seat with new foam.' },
+    ['trim_set']        = { grid = { 2, 2 }, label = 'Trim Set',         weight = 4000,  stack = true, close = false, description = 'Door cards, sills and pillar trims, with most of the clips.' },
 }
