@@ -144,5 +144,6 @@
   "not_enough_durability": "%s está gasto demais",
   "crafting_item": "Fabricando %s",
   "crafting_bench": "Bancada",
-  "open_crafting_bench": "Abrir bancada"
+  "open_crafting_bench": "Abrir bancada",
+  "inventory_busy": "Alguém já está mexendo aqui"
 }

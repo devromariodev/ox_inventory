@@ -2295,6 +2295,48 @@ end
 
 local activeSlots = {}
 
+---NewCity (#88): prende todas as casas que um item de `w`x`h` cobre a partir de
+---`slot`. A trava original prendia SO a ancora (a casa onde o item comeca) -- um
+---rifle 2x3 ocupa seis, e as outras cinco ficavam livres. Duas operacoes
+---simultaneas com ancoras diferentes e pegadas sobrepostas passavam as duas pela
+---trava; so nao duplicavam porque a validacao de grade rodava depois, o que deixa
+---de valer quando um hook cede o passo no meio (temos hooks).
+---
+---`held` e o conjunto de refs presos pela operacao em curso -- quem prende e quem
+---solta tudo no fim (`<close>`).
+---
+---Fora da grade (slot de equipamento) ou com a pegada estourando a largura nao ha
+---o que prender: a ancora ja esta presa e a validacao recusa logo em seguida.
+---@param held table<string, true>
+---@param inv OxInventory
+---@param slot number
+---@param w number
+---@param h number
+---@return boolean
+local function claimFootprint(held, inv, slot, w, h)
+    if not Grid.isGridLayout() then return true end
+    if not w or not h or w < 1 or h < 1 then return true end
+    if slot > Grid.getBaseSlots(inv) then return true end
+
+    local cols = Grid.getColumns()
+    local x, y = Grid.getCoords(slot, cols)
+
+    if x + w > cols then return true end
+
+    for dy = 0, h - 1 do
+        for dx = 0, w - 1 do
+            local ref = ('%s:%s'):format(inv.id, Grid.getSlot(x + dx, y + dy, cols))
+
+            if activeSlots[ref] and not held[ref] then return false end
+
+            activeSlots[ref] = true
+            held[ref] = true
+        end
+    end
+
+    return true
+end
+
 ---@param fromInventory OxInventory
 ---@param toInventory OxInventory
 ---@param fromData SlotWithItem
@@ -2422,12 +2464,19 @@ lib.callback.register('ox_inventory:swapItems', function(source, data)
 		end
 	end
 
+	-- NewCity (#88): a trava prendia SO a ancora (a casa onde o item comeca).
+	-- Um rifle 2x3 ocupa seis casas, e as outras cinco ficavam livres: duas trocas
+	-- simultaneas com ancoras diferentes e pegadas sobrepostas passavam as duas
+	-- pela trava, e so nao duplicavam porque a validacao de grade rodava depois --
+	-- o que deixa de valer quando um hook cede o passo no meio (temos hooks).
+	-- Agora `held` guarda tudo que esta preso e o defer solta tudo de uma vez.
+	local held = { [fromRef] = true, [toRef] = true }
+
 	activeSlots[fromRef] = true
 	activeSlots[toRef] = true
 
 	local _ <close> = defer(function()
-		activeSlots[fromRef] = nil
-		activeSlots[toRef] = nil
+		for ref in pairs(held) do activeSlots[ref] = nil end
 	end)
 
 	if toInventory and (data.toType == 'newdrop' or fromInventory ~= toInventory or data.fromSlot ~= data.toSlot) then
@@ -2469,6 +2518,42 @@ lib.callback.register('ox_inventory:swapItems', function(source, data)
 		local rotated = applyRotation and data.rotated == true
 
 		local width, height = Grid.getItemSize(fromItem, applyRotation and { rotated = rotated } or fromData.metadata)
+
+		-- Agora que se sabe o tamanho, prende o resto das casas -- ainda ANTES de
+		-- qualquer hook (o primeiro ponto onde outra troca poderia entrar).
+		local rollback = {
+			{
+				item = fromData,
+				inventory = fromAddress
+			},
+			{
+				item = toData or { slot = data.toSlot },
+				inventory = toAddress
+			}
+		}
+
+		do
+			local fromWidth, fromHeight = Grid.getItemSize(fromItem, fromData.metadata)
+
+			if not claimFootprint(held, fromInventory, data.fromSlot, fromWidth, fromHeight) then
+				return false, rollback
+			end
+
+			if not claimFootprint(held, toInventory, data.toSlot, width, height) then
+				return false, rollback
+			end
+
+			if toData then
+				-- O item deslocado cobre casas nos DOIS lados: onde ele esta e onde
+				-- ele vai cair (a casa que o outro esta deixando).
+				local toWidth, toHeight = Grid.getItemSize(Items(toData.name), toData.metadata)
+
+				if not claimFootprint(held, toInventory, data.toSlot, toWidth, toHeight)
+					or not claimFootprint(held, fromInventory, data.fromSlot, toWidth, toHeight) then
+					return false, rollback
+				end
+			end
+		end
 
 		if not canSwapSlots(fromInventory, toInventory, fromData, toData, data, width, height) then
 			return false, {
@@ -3343,13 +3428,25 @@ local function giveItem(playerId, slot, target, count)
 			return { 'cannot_give', count, data.label }
 		end
 
+		local held = { [fromRef] = true, [toRef] = true }
+
 		activeSlots[fromRef] = true
 		activeSlots[toRef] = true
 
 		local _ <close> = defer(function()
-			activeSlots[fromRef] = nil
-			activeSlots[toRef] = nil
+			for ref in pairs(held) do activeSlots[ref] = nil end
 		end)
+
+		-- Mesma trava fina da troca: dar um item tambem ocupa a pegada inteira nos
+		-- dois lados, e nao so a casa da ancora.
+		do
+			local w, h = Grid.getItemSize(item, data.metadata)
+
+			if not claimFootprint(held, fromInventory, slot, w, h)
+				or not claimFootprint(held, toInventory, toSlot, w, h) then
+				return { 'cannot_give', count, data.label }
+			end
+		end
 
 		if TriggerEventHooks('swapItems', {
 			source = fromInventory.id,

@@ -736,6 +736,30 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 			if not closestCoords then return end
 		end
 
+		-- NewCity (#88, decisao do dono 2026-08-27): UM DE CADA VEZ. O motor foi
+		-- feito pra aceitar varias pessoas no mesmo bau e avisar todas a cada
+		-- mudanca; a defesa contra duplicar era so a validacao do servidor. O dono
+		-- pediu cinto E suspensorio: alem da trava fina por casa, ninguem abre o
+		-- que outro ja abriu.
+		--
+		-- LOJA fica de fora: e a mesma loja pra todo mundo e nao tem estoque
+		-- compartilhado que possa sumir duas vezes -- travar ali so impediria dois
+		-- amigos de comprar juntos.
+		--
+		-- Entrada morta (quem caiu sem fechar) e limpa em vez de trancar o bau pra
+		-- sempre: se o dono da entrada nao esta mais online, ela nao vale nada.
+		if right.type ~= 'shop' then
+			for playerId in pairs(right.openedBy) do
+				if playerId ~= source then
+					if GetPlayerName(playerId) and Inventory(playerId) then
+						return false, false, 'inventory_busy'
+					end
+
+					right.openedBy[playerId] = nil
+				end
+			end
+		end
+
 		left:openInventory(right)
 	else
 		left:openInventory(left)
