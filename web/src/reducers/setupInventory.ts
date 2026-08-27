@@ -3,11 +3,25 @@ import { getItemData, itemDurability } from '../helpers';
 import { Items } from '../store/items';
 import { createEmptyInventory, Inventory, Slot, State } from '../typings';
 
-const densifyItems = (inventory: Inventory, curTime: number): Slot[] =>
-  Array.from(Array(inventory.slots), (_, index) => {
-    const item = Object.values(inventory.items).find((item) => item?.slot === index + 1) || {
-      slot: index + 1,
-    };
+/**
+ * NewCity (#88, Fase 4 — P2): isto roda a CADA abertura de inventario e era
+ * O(slots x itens): pra cada slot vazio, um `Object.values(...)` novo (aloca um
+ * array com tudo dentro) e uma varredura ate achar o dono do slot. Num inventario
+ * de 200 slots dava ~40 mil comparacoes e 200 arrays jogados fora, so pra desenhar
+ * uma grade quase vazia.
+ *
+ * Agora e um indice slot -> item, montado UMA vez, e o preenchimento e O(n).
+ * Mesma saida, mesma ordem.
+ */
+const densifyItems = (inventory: Inventory, curTime: number): Slot[] => {
+  const bySlot = new Map<number, Slot>();
+
+  for (const item of Object.values(inventory.items)) {
+    if (item?.slot !== undefined) bySlot.set(item.slot, item);
+  }
+
+  return Array.from(Array(inventory.slots), (_, index) => {
+    const item = bySlot.get(index + 1) || { slot: index + 1 };
 
     if (!item.name) return item;
 
@@ -18,6 +32,7 @@ const densifyItems = (inventory: Inventory, curTime: number): Slot[] =>
     item.durability = itemDurability(item.metadata, curTime);
     return item;
   });
+};
 
 export const setupInventoryReducer: CaseReducer<
   State,

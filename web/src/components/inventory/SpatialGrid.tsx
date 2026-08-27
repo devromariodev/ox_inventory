@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDragLayer, useDrop } from 'react-dnd';
 import { DragSource, Inventory, InventoryType, SlotWithItem } from '../../typings';
 import { getGridOccupancy, getTotalWeight, isSlotWithItem } from '../../helpers';
@@ -63,56 +63,8 @@ const resolveCellDrop = (
   return target;
 };
 
-interface SpatialCellProps {
-  index: number;
-  inventory: Inventory;
-  rotated: boolean;
-  covered: boolean;
-  onHover: (index: number) => void;
-}
-
-const SpatialCell: React.FC<SpatialCellProps> = ({ index, inventory, rotated, covered, onHover }) => {
-  const dispatch = useAppDispatch();
-
-  const [, drop] = useDrop<DragSource, void, unknown>(
-    () => ({
-      accept: 'SLOT',
-      hover: () => onHover(index),
-      canDrop: (source) => {
-        if (inventory.type === InventoryType.SHOP) return false;
-
-        const target = resolveCellDrop(source, inventory, index, rotated);
-
-        return target !== undefined && target.valid;
-      },
-      drop: (source) => {
-        const target = resolveCellDrop(source, inventory, index, rotated);
-
-        if (!target || !target.valid) return;
-
-        dispatch(closeTooltip());
-
-        const dropTarget = { inventory: inventory.type, item: { slot: target.slot } };
-
-        switch (source.inventory) {
-          case InventoryType.SHOP:
-            onBuy(source, dropTarget);
-            break;
-          default:
-            onSpatialDrop(source, dropTarget, rotated);
-            break;
-        }
-      },
-    }),
-    [inventory, index, rotated, onHover, dispatch]
-  );
-
-  return <div ref={drop} className={`spatial-cell${covered ? ' spatial-cell-covered' : ''}`} />;
-};
-
-const MemoSpatialCell = React.memo(SpatialCell);
-
 const SpatialGrid: React.FC<{ inventory: Inventory }> = ({ inventory }) => {
+  const dispatch = useAppDispatch();
   const [hoverCell, setHoverCell] = useState<number | null>(null);
   const isBusy = useAppSelector((state) => state.inventory.isBusy);
 
@@ -152,22 +104,118 @@ const SpatialGrid: React.FC<{ inventory: Inventory }> = ({ inventory }) => {
 
   const rotated = useRotateKey(isDragging ? dragSource : null);
 
+  // NewCity (#88, Fase 4 — P1): ANTES cada celula da grade era um alvo de
+  // arrastar do react-dnd. Uma grade de 10x5 com a mochila aberta passava de 100
+  // alvos, e QUALQUER mudanca (mexer um item, girar com R) refazia o registro de
+  // TODOS eles. Agora o alvo e um so, o da grade inteira, e a celula sob o cursor
+  // sai de conta: posicao do ponteiro menos o canto da grade, dividido pelo passo.
+  //
+  // A conta usa o tamanho REAL medido no navegador (getBoundingClientRect + o
+  // espacamento calculado), e nao o valor do CSS — a interface inteira escala com
+  // a altura da tela e com o "Tamanho" que o jogador escolhe. Mede-se uma vez por
+  // arrasto; entre um arrasto e outro a grade nao muda de tamanho.
+  const cellsRef = useRef<HTMLDivElement | null>(null);
+  const metricsRef = useRef<{ left: number; top: number; stepX: number; stepY: number } | null>(null);
+
+  const measureCells = useCallback(() => {
+    const el = cellsRef.current;
+
+    if (!el) return null;
+
+    const rect = el.getBoundingClientRect();
+
+    if (!rect.width || !rect.height) return null;
+
+    const style = getComputedStyle(el);
+    const gapX = parseFloat(style.columnGap) || 0;
+    const gapY = parseFloat(style.rowGap) || 0;
+
+    return {
+      left: rect.left,
+      top: rect.top,
+      stepX: (rect.width + gapX) / cols,
+      stepY: (rect.height + gapY) / rows,
+    };
+  }, [cols, rows]);
+
+  const cellFromPoint = useCallback(
+    (x: number, y: number): number | null => {
+      const m = metricsRef.current ?? (metricsRef.current = measureCells());
+
+      if (!m || m.stepX <= 0 || m.stepY <= 0) return null;
+
+      const col = Math.floor((x - m.left) / m.stepX);
+      const row = Math.floor((y - m.top) / m.stepY);
+
+      if (col < 0 || col >= cols || row < 0 || row >= rows) return null;
+
+      return row * cols + col;
+    },
+    [measureCells, cols, rows]
+  );
+
   const [{ isOverGrid }, dropGrid] = useDrop<DragSource, void, { isOverGrid: boolean }>(
     () => ({
       accept: 'SLOT',
       collect: (monitor) => ({ isOverGrid: monitor.isOver() }),
-      canDrop: () => false,
+      hover: (_source, monitor) => {
+        const offset = monitor.getClientOffset();
+
+        if (!offset) return;
+
+        const index = cellFromPoint(offset.x, offset.y);
+
+        if (index === null) return;
+
+        setHoverCell((previous) => (previous === index ? previous : index));
+      },
+      canDrop: (source, monitor) => {
+        if (inventory.type === InventoryType.SHOP) return false;
+
+        const offset = monitor.getClientOffset();
+
+        if (!offset) return false;
+
+        const index = cellFromPoint(offset.x, offset.y);
+
+        if (index === null) return false;
+
+        const target = resolveCellDrop(source, inventory, index, rotated);
+
+        return target !== undefined && target.valid;
+      },
+      drop: (source, monitor) => {
+        const offset = monitor.getClientOffset();
+
+        if (!offset) return;
+
+        const index = cellFromPoint(offset.x, offset.y);
+
+        if (index === null) return;
+
+        const target = resolveCellDrop(source, inventory, index, rotated);
+
+        if (!target || !target.valid) return;
+
+        dispatch(closeTooltip());
+
+        const dropTarget = { inventory: inventory.type, item: { slot: target.slot } };
+
+        if (source.inventory === InventoryType.SHOP) {
+          onBuy(source, dropTarget);
+        } else {
+          onSpatialDrop(source, dropTarget, rotated);
+        }
+      },
     }),
-    []
+    [inventory, rotated, cellFromPoint, dispatch]
   );
 
   useEffect(() => {
+    metricsRef.current = null;
+
     if (!isDragging) setHoverCell(null);
   }, [isDragging]);
-
-  const handleHover = useCallback((index: number) => {
-    setHoverCell((previous) => (previous === index ? previous : index));
-  }, []);
 
   const preview = useMemo(() => {
     if (!isDragging || !isOverGrid || hoverCell === null || !dragSource?.item) return;
@@ -223,15 +271,11 @@ const SpatialGrid: React.FC<{ inventory: Inventory }> = ({ inventory }) => {
       </div>
 
       <div ref={dropGrid} className={`spatial-grid ${isDragging ? 'spatial-grid-dragging' : ''}`}>
-        <div className="spatial-grid-cells" style={cellsStyle}>
+        <div ref={cellsRef} className="spatial-grid-cells" style={cellsStyle}>
           {Array.from({ length: cells }, (_, index) => (
-            <MemoSpatialCell
+            <div
               key={`cell-${index}`}
-              index={index}
-              inventory={inventory}
-              rotated={rotated}
-              covered={occupancy[index] !== null}
-              onHover={handleHover}
+              className={`spatial-cell${occupancy[index] !== null ? ' spatial-cell-covered' : ''}`}
             />
           ))}
 
