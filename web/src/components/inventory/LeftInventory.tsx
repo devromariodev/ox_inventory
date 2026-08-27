@@ -21,7 +21,7 @@ const LeftInventory: React.FC = () => {
   usePrefsRevision();
 
   const isSpatial =
-    UiConfig.layout === 'grid' && leftInventory.type !== 'shop' && leftInventory.type !== 'crafting';
+    UiConfig.layout === 'grid' && leftInventory.type !== 'shop';
 
   const useBindings = hasFastSlotBindings(leftInventory.type);
   const bindings = useFastSlots();

@@ -5,7 +5,6 @@ import { ClothingSlotDef, DragSource, InventoryType, Slot, SlotWithItem } from '
 import { canEquipItem, getItemRarityKey, getItemUrl, isSlotWithItem } from '../../helpers';
 import { UiConfig } from '../../store/uiConfig';
 import { onBuy } from '../../dnd/onBuy';
-import { onCraft } from '../../dnd/onCraft';
 import { onDrop } from '../../dnd/onDrop';
 import { onUse } from '../../dnd/onUse';
 import useNuiEvent from '../../hooks/useNuiEvent';
@@ -69,9 +68,6 @@ const ClothingSlot: React.FC<ClothingSlotProps> = ({ def }) => {
         switch (source.inventory) {
           case InventoryType.SHOP:
             onBuy(source, target);
-            break;
-          case InventoryType.CRAFTING:
-            onCraft(source, target);
             break;
           default:
             onDrop(source, target);

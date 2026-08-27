@@ -50,14 +50,7 @@ const SlotTooltip: React.ForwardRefRenderFunction<
             <p style={rarityColor ? { color: rarityColor } : undefined}>
               {item.metadata?.label || itemData.label || item.name}
             </p>
-            {inventoryType === 'crafting' ? (
-              <div className="tooltip-crafting-duration">
-                <ClockIcon />
-                <p>{(item.duration !== undefined ? item.duration : 3000) / 1000}s</p>
-              </div>
-            ) : (
-              <span className="tooltip-weight">{formatWeight(item.weight)}</span>
-            )}
+            <span className="tooltip-weight">{formatWeight(item.weight)}</span>
           </div>
           {rarity && (
             <div className="tooltip-rarity" style={{ color: rarityColor }}>
@@ -70,8 +63,7 @@ const SlotTooltip: React.ForwardRefRenderFunction<
               <ReactMarkdown className="tooltip-markdown">{description}</ReactMarkdown>
             </div>
           )}
-          {inventoryType !== 'crafting' ? (
-            <>
+          <>
               {item.durability !== undefined && (
                 <p>
                   {Locale.ui_durability}: {Math.trunc(item.durability)}
@@ -114,27 +106,7 @@ const SlotTooltip: React.ForwardRefRenderFunction<
                   )}
                 </Fragment>
               ))}
-            </>
-          ) : (
-            <div className="tooltip-ingredients">
-              {ingredients &&
-                ingredients.map((ingredient) => {
-                  const [item, count] = [ingredient[0], ingredient[1]];
-                  return (
-                    <div className="tooltip-ingredient" key={`ingredient-${item}`}>
-                      <ItemImage src={item ? getItemUrl(item) : undefined} />
-                      <p>
-                        {count >= 1
-                          ? `${count}x ${Items[item]?.label || item}`
-                          : count === 0
-                          ? `${Items[item]?.label || item}`
-                          : count < 1 && `${count * 100}% ${Items[item]?.label || item}`}
-                      </p>
-                    </div>
-                  );
-                })}
-            </div>
-          )}
+          </>
         </div>
       )}
     </>

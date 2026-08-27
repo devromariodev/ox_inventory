@@ -902,7 +902,7 @@ function Inventory.Create(id, label, invType, slots, weight, maxWeight, owner, i
 
 	if invType == 'player' then
 		slots = (slots or 0) + Grid.getReservedCount()
-	elseif invType ~= 'shop' and invType ~= 'crafting' then
+	elseif invType ~= 'shop' then
 		slots = Grid.scaleContainerSlots(slots, gridRows)
 	end
 
@@ -925,7 +925,7 @@ function Inventory.Create(id, label, invType, slots, weight, maxWeight, owner, i
         dbId = dbId
 	}
 
-	if invType == 'drop' or invType == 'temp' or invType == 'dumpster' then
+	if invType == 'drop' or invType == 'temp' then
 		self.datastore = true
 	else
 		self.changed = false
@@ -1059,7 +1059,7 @@ function Inventory.Save(inv)
     saveFastSlots(inv)
 
     if inv.player then
-        return shared.framework ~= 'esx' and db.savePlayer(inv.owner, data)
+        return db.savePlayer(inv.owner, data)
     elseif inv.type == 'trunk' then
         return db.saveTrunk(inv.dbId, data)
     elseif inv.type == 'glovebox' then
@@ -1098,44 +1098,11 @@ local function randomItem(loot, items, size)
     return selectedItem
 end
 
----@param loot RandomLoot[]
----@return RandomLoot[]
-local function randomLoot(loot)
-    ---@type RandomLoot[]
-    local items = {}
-    local size = #loot
-    local itemCount = math.random(0, 3)
-
-    for _ = 1, itemCount do
-        if #items >= size then break end
-
-        local item = randomItem(loot, items, size)
-
-        if item and math.random(1, 100) <= (item[4] or 80) then
-            local count = math.random(item[2], item[3])
-
-            if count > 0 then
-                items[#items + 1] = { item[1], count }
-            end
-        end
-    end
-
-    return items
-end
-
 ---@param inv inventory
 ---@param invType string
 ---@param items? table
 ---@return table returnData, number totalWeight
 local function generateItems(inv, invType, items)
-	if items == nil then
-		if invType == 'dumpster' then
-			items = randomLoot(server.dumpsterloot)
-		elseif invType == 'vehicle' then
-			items = randomLoot(server.vehicleloot)
-		end
-	end
-
 	if not items then
 		items = {}
 	end
@@ -1176,17 +1143,9 @@ function Inventory.Load(id, invType, owner)
     if invType == 'trunk' or invType == 'glovebox' then
         result = id and (invType == 'trunk' and db.loadTrunk(id) or db.loadGlovebox(id))
 
-        if not result then
-            if server.randomloot then
-                return generateItems(id, 'vehicle')
-            end
-        else
+        if result then
             result = result[invType]
         end
-	elseif invType == 'dumpster' then
-		if server.randomloot then
-			return generateItems(id, invType)
-		end
 	elseif id then
 		result = db.loadStash(owner or '', id)
 	end
@@ -3235,8 +3194,6 @@ local function prepareInventorySave(inv, buffer, time)
     table.wipe(buffer)
 
     if inv.player then
-        if shared.framework == 'esx' then return end
-
         return 1, { data, inv.owner }
     end
 

@@ -20,29 +20,11 @@ local Query = {
 Citizen.CreateThreadNow(function()
     local playerTable, playerColumn, vehicleTable, vehicleColumn
 
-    if shared.framework == 'ox' then
-        playerTable = 'character_inventory'
-        playerColumn = 'charid'
-        vehicleTable = 'vehicles'
-        vehicleColumn = 'id'
-    elseif shared.framework == 'esx' then
-        playerTable = 'users'
-        playerColumn = 'identifier'
-        vehicleTable = 'owned_vehicles'
-        vehicleColumn = 'plate'
-    elseif shared.framework == 'nd' then
-        playerTable = 'nd_characters'
-        playerColumn = 'charid'
-        vehicleTable = 'nd_vehicles'
-        vehicleColumn = 'id'
-    elseif shared.framework == 'qbx' then
-        playerTable = 'players'
-        playerColumn = 'citizenid'
-        vehicleTable = 'player_vehicles'
-        vehicleColumn = 'id'
-    else
-        return
-    end
+    -- NewCity: o esquema e o do Qbox e ponto (as pontes esx/nd/ox sairam do fork).
+    playerTable = 'players'
+    playerColumn = 'citizenid'
+    vehicleTable = 'player_vehicles'
+    vehicleColumn = 'id'
 
     for k, v in pairs(Query) do
         Query[k] = v:gsub('{user_table}', playerTable):gsub('{user_column}', playerColumn):gsub('{vehicle_table}',

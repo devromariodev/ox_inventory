@@ -8,7 +8,6 @@ import { onDrop } from '../../dnd/onDrop';
 import { onBuy } from '../../dnd/onBuy';
 import { Items } from '../../store/items';
 import {
-  canCraftItem,
   canPurchaseItem,
   getItemRarity,
   getItemRarityKey,
@@ -17,7 +16,6 @@ import {
 } from '../../helpers';
 import { onUse } from '../../dnd/onUse';
 import { Locale } from '../../store/locale';
-import { onCraft } from '../../dnd/onCraft';
 import useNuiEvent from '../../hooks/useNuiEvent';
 import { ItemsPayload } from '../../reducers/refreshSlots';
 import { closeTooltip, openTooltip } from '../../store/tooltip';
@@ -51,7 +49,7 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
   const timerRef = useRef<number | null>(null);
 
   const canDrag = useCallback(() => {
-    return canPurchaseItem(item, { type: inventoryType, groups: inventoryGroups }) && canCraftItem(item, inventoryType);
+    return canPurchaseItem(item, { type: inventoryType, groups: inventoryGroups });
   }, [item, inventoryType, inventoryGroups]);
 
   const [{ isDragging }, drag] = useDrag<DragSource, void, { isDragging: boolean }>(
@@ -88,9 +86,6 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
           case InventoryType.SHOP:
             onBuy(source, { inventory: inventoryType, item: { slot: item.slot } });
             break;
-          case InventoryType.CRAFTING:
-            onCraft(source, { inventory: inventoryType, item: { slot: item.slot } });
-            break;
           default:
             onDrop(source, { inventory: inventoryType, item: { slot: item.slot } });
             break;
@@ -99,7 +94,7 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
       canDrop: (source) =>
         (source.item.slot !== item.slot || source.inventory !== inventoryType) &&
         inventoryType !== InventoryType.SHOP &&
-        inventoryType !== InventoryType.CRAFTING,
+        true,
     }),
     [inventoryType, item]
   );
@@ -129,7 +124,7 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     dispatch(closeTooltip());
     if (timerRef.current) clearTimeout(timerRef.current);
-    if (event.ctrlKey && isSlotWithItem(item) && inventoryType !== 'shop' && inventoryType !== 'crafting') {
+    if (event.ctrlKey && isSlotWithItem(item) && inventoryType !== 'shop') {
       onDrop({ item: item, inventory: inventoryType });
     } else if (event.altKey && isSlotWithItem(item) && inventoryType === 'player') {
       onUse(item);
@@ -151,8 +146,7 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
   const style: React.CSSProperties = {
     filter:
       !isEmpty &&
-      (!canPurchaseItem(item, { type: inventoryType, groups: inventoryGroups }) ||
-        !canCraftItem(item, inventoryType))
+      (!canPurchaseItem(item, { type: inventoryType, groups: inventoryGroups }))
         ? 'brightness(80%) grayscale(100%)'
         : undefined,
     opacity: isDragging ? 0.4 : 1.0,

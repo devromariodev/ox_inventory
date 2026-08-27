@@ -179,7 +179,7 @@ debugData([
       },
       rightInventory: {
         id: 'shop',
-        type: 'crafting',
+        type: 'shop',
         slots: 5000,
         label: 'Bob Smith',
         weight: 3000,
@@ -250,22 +250,6 @@ const App: React.FC = () => {
       document.body.classList.remove('no-backdrop-mode');
       root?.classList.remove('no-backdrop-mode');
     }
-  }, [noBackdrop]);
-
-  // When in no-backdrop mode, detect clicks on the right side and transfer focus to sd-crafting
-  useEffect(() => {
-    if (!noBackdrop) return;
-
-    const handleClick = (e: MouseEvent) => {
-      const screenMidpoint = window.innerWidth / 2;
-      if (e.clientX > screenMidpoint) {
-        // Click was on the right side - transfer focus to sd-crafting
-        fetchNui('transferFocusToCrafting', {});
-      }
-    };
-
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
   }, [noBackdrop]);
 
   return (

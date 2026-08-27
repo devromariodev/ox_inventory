@@ -9,8 +9,7 @@ import { UiConfig } from '../../store/uiConfig';
 const RightInventory: React.FC = () => {
   const rightInventory = useAppSelector(selectRightInventory);
 
-  const isSpatial =
-    UiConfig.layout === 'grid' && rightInventory.type !== 'shop' && rightInventory.type !== 'crafting';
+  const isSpatial = UiConfig.layout === 'grid' && rightInventory.type !== 'shop';
 
   const slots = useMemo(() => {
     const baseSlotCount = getBaseSlotCount(rightInventory);

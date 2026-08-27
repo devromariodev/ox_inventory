@@ -9,7 +9,6 @@ import { togglePanelCollapsed, usePanelCollapsed } from '../../hooks/usePanelCol
 import { fetchNui } from '../../utils/fetchNui';
 import { closeTooltip } from '../../store/tooltip';
 import { onBuy } from '../../dnd/onBuy';
-import { onCraft } from '../../dnd/onCraft';
 import {
   getGridDimensions,
   isBlockedContainerMove,
@@ -46,7 +45,7 @@ const resolveCellDrop = (
   const sameInventory = source.inventory === inventory.type;
 
   const dropRotated =
-    source.inventory === InventoryType.SHOP || source.inventory === InventoryType.CRAFTING
+    source.inventory === InventoryType.SHOP
       ? source.rotated === true
       : rotated;
 
@@ -80,7 +79,7 @@ const SpatialCell: React.FC<SpatialCellProps> = ({ index, inventory, rotated, co
       accept: 'SLOT',
       hover: () => onHover(index),
       canDrop: (source) => {
-        if (inventory.type === InventoryType.SHOP || inventory.type === InventoryType.CRAFTING) return false;
+        if (inventory.type === InventoryType.SHOP) return false;
 
         const target = resolveCellDrop(source, inventory, index, rotated);
 
@@ -98,9 +97,6 @@ const SpatialCell: React.FC<SpatialCellProps> = ({ index, inventory, rotated, co
         switch (source.inventory) {
           case InventoryType.SHOP:
             onBuy(source, dropTarget);
-            break;
-          case InventoryType.CRAFTING:
-            onCraft(source, dropTarget);
             break;
           default:
             onSpatialDrop(source, dropTarget, rotated);

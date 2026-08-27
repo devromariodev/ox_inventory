@@ -6,7 +6,6 @@ import WeightBar from '../utils/WeightBar';
 import ItemImage from '../utils/ItemImage';
 import { Items } from '../../store/items';
 import {
-  canCraftItem,
   canPurchaseItem,
   getItemRarity,
   getItemRarityKey,
@@ -82,7 +81,7 @@ const SpatialSlot: React.FC<SpatialSlotProps> = ({
   const rotated = item.metadata?.rotated === true;
 
   const canDrag = useCallback(() => {
-    return canPurchaseItem(item, { type: inventoryType, groups: inventoryGroups }) && canCraftItem(item, inventoryType);
+    return canPurchaseItem(item, { type: inventoryType, groups: inventoryGroups });
   }, [item, inventoryType, inventoryGroups]);
 
   const [{ isDragging }, drag] = useDrag<DragSource, void, { isDragging: boolean }>(
@@ -164,7 +163,7 @@ const SpatialSlot: React.FC<SpatialSlotProps> = ({
     dispatch(closeTooltip());
     if (timerRef.current) clearTimeout(timerRef.current);
 
-    if (event.ctrlKey && inventoryType !== 'shop' && inventoryType !== 'crafting') {
+    if (event.ctrlKey && inventoryType !== 'shop') {
       onSpatialDrop({ item, inventory: inventoryType }, undefined, rotated);
     } else if (event.altKey && inventoryType === 'player') {
       onUse(item);
@@ -184,7 +183,7 @@ const SpatialSlot: React.FC<SpatialSlotProps> = ({
   const style: React.CSSProperties = {
     ...spatialCellStyle(x, y, width, height),
     filter:
-      !canPurchaseItem(item, { type: inventoryType, groups: inventoryGroups }) || !canCraftItem(item, inventoryType)
+      !canPurchaseItem(item, { type: inventoryType, groups: inventoryGroups })
         ? 'brightness(80%) grayscale(100%)'
         : undefined,
     opacity: isDragging ? 0.4 : undefined,

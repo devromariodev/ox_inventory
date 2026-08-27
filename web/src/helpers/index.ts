@@ -60,36 +60,6 @@ export const canPurchaseItem = (item: Slot, inventory: { type: Inventory['type']
   }
 };
 
-export const canCraftItem = (item: Slot, inventoryType: string) => {
-  if (!isSlotWithItem(item) || inventoryType !== 'crafting') return true;
-  if (!item.ingredients) return true;
-  const leftInventory = store.getState().inventory.leftInventory;
-  const ingredientItems = Object.entries(item.ingredients);
-
-  const remainingItems = ingredientItems.filter((ingredient) => {
-    const [item, count] = [ingredient[0], ingredient[1]];
-    const globalItem = Items[item];
-
-    if (count >= 1) {
-      if (globalItem && globalItem.count >= count) return false;
-    }
-
-    const hasItem = leftInventory.items.find((playerItem) => {
-      if (isSlotWithItem(playerItem) && playerItem.name === item) {
-        if (count < 1) {
-          if (playerItem.metadata?.durability >= count * 100) return true;
-
-          return false;
-        }
-      }
-    });
-
-    return !hasItem;
-  });
-
-  return remainingItems.length === 0;
-};
-
 export const isSlotWithItem = (slot: Slot, strict: boolean = false): slot is SlotWithItem =>
   (slot.name !== undefined && slot.weight !== undefined) ||
   (strict && slot.name !== undefined && slot.count !== undefined && slot.weight !== undefined);

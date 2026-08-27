@@ -1,9 +1,7 @@
 if not lib then return end
 
 require 'modules.bridge.server'
-require 'modules.crafting.server'
 require 'modules.shops.server'
-require 'modules.pefcl.server'
 
 if GetConvar('inventory:versioncheck', 'true') == 'true' then
 	lib.versionCheck('communityox/ox_inventory')
@@ -581,25 +579,6 @@ end
 exports('setPlayerInventory', server.setPlayerInventory)
 AddEventHandler('ox_inventory:setPlayerInventory', server.setPlayerInventory)
 
-local registeredDumpsters = {}
-
----@param coords vector3
----@return string?
-local function getDumpsterFromCoords(coords)
-	local found
-
-	for i = 1, #registeredDumpsters do
-		local distance = #(coords - registeredDumpsters[i])
-
-		if distance < 0.1 then
-			found = i
-			break
-		end
-	end
-
-	return found
-end
-
 ---@param playerPed number
 ---@param stash OxInventory
 ---@return vector3?
@@ -707,28 +686,6 @@ local function openInventory(source, invType, data, ignoreSecurityChecks)
 		elseif invType == 'policeevidence' then
 			if ignoreSecurityChecks or server.hasGroup(left, shared.police) then
 				right = Inventory(('evidence-%s'):format(data))
-			end
-		elseif invType == 'dumpster' then
-			if shared.networkdumpsters then
-				local dumpsterId = getDumpsterFromCoords(data)
-				right = dumpsterId and Inventory(('dumpster-%s'):format(dumpsterId))
-
-				if not right then
-					dumpsterId = #registeredDumpsters + 1
-					right = Inventory.Create(('dumpster-%s'):format(dumpsterId), locale('dumpster'), invType, 15, 0, 100000, false)
-					registeredDumpsters[dumpsterId] = data
-				end
-			else
-				---@cast data string
-				right = Inventory(data)
-
-				if not right then
-					local netid = tonumber(data:sub(9))
-
-					if netid and NetworkGetEntityFromNetworkId(netid) > 0 then
-						right = Inventory.Create(data, locale('dumpster'), invType, 15, 0, 100000, false)
-					end
-				end
 			end
 		elseif invType == 'container' then
 			left.containerSlot = data --[[@as number]]

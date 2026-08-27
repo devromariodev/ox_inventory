@@ -14,12 +14,14 @@ end
 
 shared = {
     resource = GetCurrentResourceName(),
-    framework = GetConvar('inventory:framework', 'esx'),
+    -- NewCity: TRAVADO no Qbox (ADR-0001). As pontes esx/nd/ox foram apagadas do
+    -- fork; ler a convar aqui so serviria pra alguem apontar pra uma ponte que
+    -- nao existe mais e o inventario morrer no boot com um erro obscuro.
+    framework = 'qbx',
     playerslots = GetConvarInt('inventory:slots', 50),
     playerweight = GetConvarInt('inventory:weight', 30000),
     target = GetConvarInt('inventory:target', 0) == 1,
-    police = json.decode(GetConvar('inventory:police', '["police", "sheriff"]')),
-    networkdumpsters = GetConvarInt('inventory:networkdumpsters', 0) == 1
+    police = json.decode(GetConvar('inventory:police', '["police", "sheriff"]'))
 }
 
 shared.dropslots = GetConvarInt('inventory:dropslots', shared.playerslots)
@@ -44,28 +46,8 @@ if IsDuplicityVersion() then
         bulkstashsave = GetConvarInt('inventory:bulkstashsave', 1) == 1,
         loglevel = GetConvarInt('inventory:loglevel', 1),
         randomprices = GetConvarInt('inventory:randomprices', 0) == 1,
-        randomloot = GetConvarInt('inventory:randomloot', 1) == 1,
         evidencegrade = GetConvarInt('inventory:evidencegrade', 2),
         trimplate = GetConvarInt('inventory:trimplate', 1) == 1,
-        vehicleloot = json.decode(GetConvar('inventory:vehicleloot', [[
-			[
-				["sprunk", 1, 1],
-				["water", 1, 1],
-				["garbage", 1, 2, 50],
-				["panties", 1, 1, 5],
-				["money", 1, 50],
-				["money", 200, 400, 5],
-				["bandage", 1, 1]
-			]
-		]])),
-        dumpsterloot = json.decode(GetConvar('inventory:dumpsterloot', [[
-			[
-				["mustard", 1, 1],
-				["garbage", 1, 3],
-				["money", 1, 10],
-				["burger", 1, 1]
-			]
-		]])),
         validhosts = json.decode(GetConvar('inventory:validhosts', [[
 			{
                 "r2.fivemanage.com": true,
@@ -140,13 +122,6 @@ else
         }
     ]])) or fallbackmarker
 
-    client.craftingmarker = json.decode(GetConvar('inventory:craftingmarker', [[
-        {
-            "type": 2,
-            "colour": [150, 150, 30],
-            "scale": [0.3, 0.2, 0.15]
-        }
-    ]])) or fallbackmarker
 
     client.dropmarker = json.decode(GetConvar('inventory:dropmarker', [[
         {
