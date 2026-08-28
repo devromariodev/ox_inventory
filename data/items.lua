@@ -575,122 +575,99 @@ return {
         weight = 160,
     },
 
+    -- Celulares (ADR-0014 do newcity): os 9 aparelhos abrem o MESMO telefone
+    -- (nc_phone); a cor e so a cara da moldura, nunca funcao. Antes apontavam para
+    -- o sd-phone do scaffold da demo, que nao existe no servidor — nenhum fazia nada.
     ['phone'] = {
         label = 'Celular',
         rarity = 'uncommon',
         grid = { 1, 2 },
         weight = 190,
         stack = false,
-        consume = 0, -- never consumed on use; opens sd-phone (black frame)
+        consume = 0, -- nunca consome no uso: abre o telefone
         server = {
-            export = 'sd-phone.usePhone'
+            export = 'nc_phone.usePhone'
         }
     },
 
     ['phone_black'] = {
-        label = 'Phone',
+        label = 'Celular Preto',
         rarity = 'uncommon',
         grid = { 1, 2 },
         weight = 190,
         stack = false,
-        consume = 0, -- never consumed on use; opens sd-phone (black frame). Named phone_black
-        server = {   -- because a bare 'phone' item name is intercepted by another resource.
-            export = 'sd-phone.usePhone_black'
-        },
-        buttons = {
-            { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-        }
+        consume = 0,
+        server = { export = 'nc_phone.usePhone' }
     },
 
     ['phone_blue'] = {
-        label = 'Blue Phone',
+        label = 'Celular Azul',
         rarity = 'uncommon',
         grid = { 1, 2 },
         weight = 190,
         stack = false,
         consume = 0,
-        server = { export = 'sd-phone.usePhone_blue' },
-        buttons = {
-            { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-        }
+        server = { export = 'nc_phone.usePhone' }
     },
 
     ['phone_green'] = {
-        label = 'Green Phone',
+        label = 'Celular Verde',
         rarity = 'uncommon',
         grid = { 1, 2 },
         weight = 190,
         stack = false,
         consume = 0,
-        server = { export = 'sd-phone.usePhone_green' },
-        buttons = {
-            { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-        }
+        server = { export = 'nc_phone.usePhone' }
     },
 
     ['phone_orange'] = {
-        label = 'Orange Phone',
+        label = 'Celular Laranja',
         rarity = 'uncommon',
         grid = { 1, 2 },
         weight = 190,
         stack = false,
         consume = 0,
-        server = { export = 'sd-phone.usePhone_orange' },
-        buttons = {
-            { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-        }
+        server = { export = 'nc_phone.usePhone' }
     },
 
     ['phone_pink'] = {
-        label = 'Pink Phone',
+        label = 'Celular Rosa',
         rarity = 'uncommon',
         grid = { 1, 2 },
         weight = 190,
         stack = false,
         consume = 0,
-        server = { export = 'sd-phone.usePhone_pink' },
-        buttons = {
-            { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-        }
+        server = { export = 'nc_phone.usePhone' }
     },
 
     ['phone_purple'] = {
-        label = 'Purple Phone',
+        label = 'Celular Roxo',
         rarity = 'uncommon',
         grid = { 1, 2 },
         weight = 190,
         stack = false,
         consume = 0,
-        server = { export = 'sd-phone.usePhone_purple' },
-        buttons = {
-            { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-        }
+        server = { export = 'nc_phone.usePhone' }
     },
 
     ['phone_red'] = {
-        label = 'Red Phone',
+        label = 'Celular Vermelho',
         rarity = 'uncommon',
         grid = { 1, 2 },
         weight = 190,
         stack = false,
         consume = 0,
-        server = { export = 'sd-phone.usePhone_red' },
-        buttons = {
-            { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-        }
+        server = { export = 'nc_phone.usePhone' }
     },
 
     ['phone_yellow'] = {
-        label = 'Yellow Phone',
+        label = 'Celular Amarelo',
         rarity = 'uncommon',
         grid = { 1, 2 },
         weight = 190,
         stack = false,
         consume = 0,
-        server = { export = 'sd-phone.usePhone_yellow' },
-        buttons = {
-            { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-        }
+        server = { export = 'nc_phone.usePhone' }
     },
 
     ['tablet'] = {
