@@ -1,4 +1,4 @@
-return {
+local Vehicles = {
 	-- 0	vehicle has no storage
 	-- 1	vehicle has no trunk storage
 	-- 2	vehicle has no glovebox storage
@@ -88,3 +88,54 @@ return {
 		},
 	}
 }
+
+-- ==== NEWCITY ==============================================================
+-- A POLITICA (quanto cabe em cada carro) mora no nc_vehicles, em
+-- shared/storage.lua — tabela gerada por tools/vehicle-storage. Aqui so a
+-- FUSAO.
+--
+-- Por que a tabela nao mora aqui: a loja de carros mostra no card quanto a
+-- mala aguenta, e os dois lados tem que ler o MESMO numero. Se cada um
+-- tivesse a sua copia, o card mentiria mais cedo ou mais tarde.
+--
+-- Por que os numeros do upstream nao serviam: eles vem so por CLASSE, e o
+-- porta-luvas de quase todo carro aguentava 88 kg — com o jogador inteiro
+-- carregando 30 kg. Cabiam tres mochilas de jogador no porta-luvas.
+--
+-- Sem o nc_vehicles no ar, valem os numeros do upstream: degradacao, nao erro.
+-- E por isso que o pcall engole em silencio.
+do
+    local bruto = LoadResourceFile('nc_vehicles', 'shared/storage.lua')
+    local chunk = bruto and load(bruto, '@nc_storage', 't')
+    local ok, nc = pcall(chunk or function() end)
+
+    if ok and type(nc) == 'table' and type(nc.modelos) == 'table' then
+        -- Fallback por classe do GTA, pro que a tabela por modelo nao cobre.
+        for classe, cap in pairs(nc.classes or {}) do
+            Vehicles.trunk[classe] = { 50, cap.mala }
+            Vehicles.glovebox[classe] = { 50, cap.luvas }
+        end
+
+        -- Por modelo. `Storage` diz se o compartimento EXISTE e por onde abre;
+        -- `trunk.models`/`glovebox.models` dizem QUANTO cabe.
+        for modelo, cap in pairs(nc.modelos) do
+            local hash = GetHashKey(modelo)
+
+            if (cap.mala or 0) > 0 then
+                Vehicles.trunk.models[hash] = { 50, cap.mala }
+                -- 3 = mala no capo (motor central/traseiro); nil = traseira
+                -- normal, que e o comportamento padrao.
+                Vehicles.Storage[hash] = cap.onde == 'capo' and 3 or nil
+            else
+                -- 1 = sem mala mas com porta-luvas; 0 = sem nada.
+                Vehicles.Storage[hash] = (cap.luvas or 0) > 0 and 1 or 0
+            end
+
+            if (cap.luvas or 0) > 0 then
+                Vehicles.glovebox.models[hash] = { 50, cap.luvas }
+            end
+        end
+    end
+end
+
+return Vehicles

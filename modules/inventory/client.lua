@@ -17,10 +17,22 @@ function Inventory.CanAccessTrunk(entity)
 
     if (checkVehicle == 0 or checkVehicle == 1) or (not Vehicles.trunk[vehicleClass] and not Vehicles.trunk.models[vehicleHash]) then return end
 
+    -- NEWCITY: so `3` e "mala no capo". O upstream mandava QUALQUER valor
+    -- de Storage pra porta 4 (capo) — inclusive o `2` ("sem porta-luvas"),
+    -- que abriria a porta errada. Nenhum veiculo do upstream usa 2, entao
+    -- nunca apareceu; a nossa tabela usa.
     ---@type number | number[]
-    local doorId = checkVehicle and 4 or 5
+    local doorId = checkVehicle == 3 and 4 or 5
 
-    if not Vehicles.trunk.boneIndex?[vehicleHash] and not GetIsDoorValid(entity, doorId --[[@as number]]) then
+    -- NEWCITY: quando a NOSSA tabela declara que este modelo tem mala, a
+    -- heuristica de porta nao pode vetar. Era o segundo portao do bug do
+    -- Zentorno: ele nao tem osso `boot` nem porta traseira valida, entao
+    -- mesmo limpando a `Storage` a funcao voltava calada e a mala nunca
+    -- abria. Quem mexesse so na tabela acharia que a correcao falhou.
+    local temMalaDeclarada = Vehicles.trunk.models[vehicleHash] ~= nil
+
+    if not temMalaDeclarada and not Vehicles.trunk.boneIndex?[vehicleHash]
+        and not GetIsDoorValid(entity, doorId --[[@as number]]) then
         if vehicleClass ~= 11 and (doorId ~= 5 or GetEntityBoneIndexByName(entity, 'boot') ~= -1 or not GetIsDoorValid(entity, 2)) then
             return
         end
