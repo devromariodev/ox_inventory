@@ -182,7 +182,13 @@ function client.openInventory(inv, data)
 		end
 	elseif IsNuiFocused() then
 		-- If triggering from another nui, may need to wait for focus to end.
-		Wait(100)
+		-- NEWCITY: espera ate o foco SAIR, com teto nos mesmos 100 ms, em vez de
+		-- 100 ms fixos sempre. Na pratica o outro NUI solta o foco no primeiro
+		-- quadro, e o caso comum ("fechei um menu, abri o inventario") deixa de
+		-- pagar um decimo de segundo parado. A rede de seguranca e a mesma: se o
+		-- foco nao sair, espera-se exatamente o que se esperava antes.
+		local focusDeadline = GetGameTimer() + 100
+		while IsNuiFocused() and GetGameTimer() < focusDeadline do Wait(0) end
 
         -- People still complain about this being an "error" and ask "how fix" despite being a warning
         -- for people with above room-temperature iqs to look into resource conflicts on their own.
@@ -257,12 +263,21 @@ function client.openInventory(inv, data)
     end
 
 
+    -- NEWCITY: o gesto sai do caminho critico e passa a correr AO LADO da tela,
+    -- nao na frente dela. `Utils.PlayAnim` chama `lib.requestAnimDict`, que fica
+    -- parado ate o jogo carregar o dicionario da animacao -- e como ha um
+    -- `RemoveAnimDict` logo em seguida, ele nunca fica em cache: a espera se
+    -- repetia a CADA abertura, antes do `SetNuiFocus`/`SendNUIMessage` aqui
+    -- embaixo. O gesto continua existindo (quem esta do lado ve a mao indo no
+    -- bolso); o que muda e a tela nao esperar mais por ele.
     if not cache.vehicle then
-        if inv == 'player' then
-            Utils.PlayAnim(0, 'mp_common', 'givetake1_a', 8.0, 1.0, 2000, 50, 0.0, 0, 0, 0)
-        elseif inv ~= 'trunk' then
-            Utils.PlayAnim(0, 'pickup_object', 'putdown_low', 5.0, 1.5, 1000, 48, 0.0, 0, 0, 0)
-        end
+        CreateThread(function()
+            if inv == 'player' then
+                Utils.PlayAnim(0, 'mp_common', 'givetake1_a', 8.0, 1.0, 2000, 50, 0.0, 0, 0, 0)
+            elseif inv ~= 'trunk' then
+                Utils.PlayAnim(0, 'pickup_object', 'putdown_low', 5.0, 1.5, 1000, 48, 0.0, 0, 0, 0)
+            end
+        end)
     end
 
     plyState.invOpen = true
