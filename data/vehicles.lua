@@ -138,4 +138,21 @@ do
     end
 end
 
+-- Tug e Marquis sao os 2 unicos barcos com FLAG_TALL_SHIP (dump
+-- DurtyFree/gta-v-data-dumps), e o jogo infla a caixa delimitadora deles bem
+-- alem do casco visivel (Tug: 14,9 m de altura; Marquis: 21,8 m, contra 2-4 m
+-- do resto da frota). A formula generica de baixo (meio da caixa, canto
+-- traseiro) calculava um ponto 3,5-9 m acima do conves — fora de alcance a
+-- pe, e por isso a mala desses dois nunca abria (Alt nao aparecia na popa).
+--
+-- Os offsets abaixo sao uma ESTIMATIVA conservadora, pela escala de barcos
+-- vizinhos de porte comparavel (jetmax/longfin: popa entre -5 e -6,3 m,
+-- altura 0,6-0,7 m) — nao e coordenada exata do conves, medida em jogo.
+-- Precisa de confirmacao do dono; ajuste os numeros aqui se o Alt ainda nao
+-- aparecer no lugar certo.
+Vehicles.trunk.offsets = {
+    [`tug`] = vec3(0.0, -5.0, 1.0),
+    [`marquis`] = vec3(0.0, -6.0, 1.0),
+}
+
 return Vehicles

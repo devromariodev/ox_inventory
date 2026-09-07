@@ -42,8 +42,18 @@ function Inventory.CanAccessTrunk(entity)
         end
     end
 
-    local min, max = GetModelDimensions(vehicleHash)
-    local offset = (max - min) * (not checkVehicle and vec3(0.5, 0, 0.5) or vec3(0.5, 1, 0.5)) + min
+    -- NEWCITY: Tug e Marquis tem a caixa delimitadora do jogo inflada bem
+    -- alem do casco visivel (unicos FLAG_TALL_SHIP da frota) — a formula de
+    -- baixo (meio da caixa) calcularia um ponto 3,5-9 m acima do conves,
+    -- fora de alcance a pe. Offset fixo, medido fora do jogo (ver
+    -- data/vehicles.lua), no lugar da heuristica generica pra esses dois.
+    local offset = Vehicles.trunk.offsets and Vehicles.trunk.offsets[vehicleHash]
+
+    if not offset then
+        local min, max = GetModelDimensions(vehicleHash)
+        offset = (max - min) * (not checkVehicle and vec3(0.5, 0, 0.5) or vec3(0.5, 1, 0.5)) + min
+    end
+
     offset = GetOffsetFromEntityInWorldCoords(entity, offset.x, offset.y, offset.z)
 
     if #(GetEntityCoords(cache.ped) - offset) < 1.5 then
