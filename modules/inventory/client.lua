@@ -42,18 +42,36 @@ function Inventory.CanAccessTrunk(entity)
         end
     end
 
-    -- NEWCITY: Tug e Marquis tem a caixa delimitadora do jogo inflada bem
-    -- alem do casco visivel (unicos FLAG_TALL_SHIP da frota) — a formula de
-    -- baixo (meio da caixa) calcularia um ponto 3,5-9 m acima do conves,
-    -- fora de alcance a pe. Offset fixo, medido fora do jogo (ver
-    -- data/vehicles.lua), no lugar da heuristica generica pra esses dois.
-    local offset = Vehicles.trunk.offsets and Vehicles.trunk.offsets[vehicleHash]
-
-    if not offset then
+    -- NEWCITY: BARCO e conves, nao para-choque.
+    --
+    -- A conta generica (abaixo) procura UM PONTO — meio da caixa do modelo, no
+    -- canto traseiro — e exige o jogador a 1,5 m dele. E o gesto do carro: dar
+    -- a volta e parar atras da mala. Em barco isso nao existe. O Tug tem 31 m
+    -- de casco, e a caixa que o jogo declara pra ele e inflada (ele e o Marquis
+    -- sao os dois unicos FLAG_TALL_SHIP da frota: 14,9 m e 21,8 m de altura,
+    -- contra 2-4 m do resto), entao o ponto caia metros NO AR e a mala nao
+    -- abria de lugar nenhum — testado pelo dono no Tug.
+    --
+    -- Em barco a regra e ESTAR EM CIMA DELE: converte a posicao do jogador pro
+    -- espaco do proprio barco e aceita se cair dentro da planta do casco.
+    -- Altura fica de fora da conta de proposito (conves alto, casco submerso),
+    -- e a planta serve inflada ou nao — a caixa nunca e MENOR que o casco.
+    if vehicleClass == 14 then
         local min, max = GetModelDimensions(vehicleHash)
-        offset = (max - min) * (not checkVehicle and vec3(0.5, 0, 0.5) or vec3(0.5, 1, 0.5)) + min
+        local pedCoords = GetEntityCoords(cache.ped)
+        local p = GetOffsetFromEntityGivenWorldCoords(entity, pedCoords.x, pedCoords.y, pedCoords.z)
+        local margem = 1.0
+
+        if p.x >= min.x - margem and p.x <= max.x + margem
+            and p.y >= min.y - margem and p.y <= max.y + margem then
+            return doorId
+        end
+
+        return
     end
 
+    local min, max = GetModelDimensions(vehicleHash)
+    local offset = (max - min) * (not checkVehicle and vec3(0.5, 0, 0.5) or vec3(0.5, 1, 0.5)) + min
     offset = GetOffsetFromEntityInWorldCoords(entity, offset.x, offset.y, offset.z)
 
     if #(GetEntityCoords(cache.ped) - offset) < 1.5 then
@@ -86,7 +104,13 @@ if shared.target then
     exports.ox_target:addGlobalVehicle({
         icon = 'fas fa-truck-ramp-box',
         label = locale('open_label', locale('storage')),
-        distance = 1.5,
+        -- NEWCITY: 7 e o padrao do proprio ox_target, e aqui ele mede da
+        -- camera ate o PONTO onde a mira bate — nao ate o carro. Com 1,5 a
+        -- opcao sumia em cima de um conves grande so porque a pessoa estava
+        -- olhando pro outro lado do navio. Quem manda na proximidade continua
+        -- sendo o `canInteract` (1,5 m da mala no carro; em cima do casco no
+        -- barco), entao carro nao afrouxou nada.
+        distance = 7,
         canInteract = Inventory.CanAccessTrunk,
         onSelect = function(data)
             return Inventory.OpenTrunk(data.entity)
