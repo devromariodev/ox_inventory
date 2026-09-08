@@ -69,7 +69,24 @@ return {
 		blip = {
 			id = 402, colour = 69, scale = 0.8
 		}, inventory = {
-			{ name = 'lockpick', price = 10 }
+			{ name = 'lockpick', price = 10 },
+			-- fluidos do motor (ADR-0026, regra no 6): o aditivo faz a gambiarra do
+			-- radiador resfriar melhor; a lata de oleo e uma troca inteira, na rua
+			{ name = 'motor_oil', price = 250 },
+			{ name = 'coolant', price = 60 },
+			-- >>> NEWCITY PESCARIA >>>
+			-- A vara e CONSUMIVEL (30 usos na simples, 100 na profissional), a isca
+			-- some a cada lancamento e a faca cega em 50 cortes: os tres sao o ralo
+			-- do emprego (ECO-14), calibrados pra comer ~15% do que ele paga.
+			{ name = 'vara_basica', price = 250 },
+			{ name = 'vara_master', price = 2500 },
+			{ name = 'isca_basica', price = 5 },
+			{ name = 'isca_premium', price = 12 },
+			{ name = 'isca_especial', price = 25 },
+			-- A faca de filetar E a WEAPON_KNIFE: item comum nao vai pra mao, e
+			-- cortar exige ela EMPUNHADA. Pericia cross-job (ADR-0033).
+			{ name = 'WEAPON_KNIFE', price = 150 }
+			-- <<< NEWCITY PESCARIA <<<
 		}, locations = {
 			vec3(2748.0, 3473.0, 55.67),
 			vec3(342.99, -1298.26, 32.51)
@@ -111,7 +128,7 @@ return {
 	},
 
 	PoliceArmoury = {
-		name = 'Police Armoury',
+		name = 'Arsenal da Polícia',
 		groups = shared.police,
 		blip = {
 			id = 110, colour = 84, scale = 0.8
@@ -131,7 +148,7 @@ return {
 	},
 
 	Medicine = {
-		name = 'Medicine Cabinet',
+		name = 'Suprimentos Médicos',
 		groups = {
 			['ambulance'] = 0
 		},
@@ -147,6 +164,23 @@ return {
 		}
 	},
 
+	-- >>> NEWCITY: MERCADO NEGRO DESLIGADO >>>
+	-- Loja de demonstracao do upstream, aberta a QUALQUER jogador (sem `groups`),
+	-- em 309.09/-913.75/56.46 -- pistola ceramica, adaga, supressor e municao de
+	-- rifle pagos em `black_money`.
+	--
+	-- POR QUE SAI (`IA-14`, o documento vence o codigo): `CRI-19` de
+	-- `docs/20-CONTRATO-DE-CRIME-VEICULAR.md` e o `nc_robbery/shared/config.lua`
+	-- declaram, os dois, que o dinheiro sujo "e um item que ninguem gasta" --
+	-- nao existe lavagem, e POR ONDE o sujo vira alguma coisa e decisao do dono,
+	-- com ADR proprio. Esta loja ja era esse "por onde", sem ninguem ter
+	-- decidido: um ralo de dinheiro sujo que devolve ARMA, no meio da cidade,
+	-- sem porta e sem preco calibrado.
+	--
+	-- Fica comentada em vez de apagada porque o catalogo e a coordenada sao a
+	-- unica coisa que se perde -- no dia em que o mercado negro for desenhado de
+	-- verdade, comeca daqui.
+	--[[
 	BlackMarketArms = {
 		name = 'Black Market (Arms)',
 		inventory = {
@@ -161,9 +195,11 @@ return {
 
 		}
 	},
+	]]
+	-- <<< NEWCITY: MERCADO NEGRO DESLIGADO <<<
 
 	VendingMachineDrinks = {
-		name = 'Vending Machine',
+		name = 'Máquina de Bebidas',
 		inventory = {
 			{ name = 'water', price = 10 },
 			{ name = 'cola', price = 10 },

@@ -2253,8 +2253,8 @@ return {
     ['fuel_pump']       = { grid = { 2, 2 }, label = 'Fuel Pump',        weight = 1100,  stack = true, close = false, description = 'In-tank pump and sender assembly.' },
     ['fuel_line']       = { grid = { 2, 1 }, label = 'Fuel Line',        weight = 300,   stack = true, close = false, description = 'Braided line, rated well past anything this engine will make.' },
     ['car_battery']     = { grid = { 2, 2 }, label = 'Car Battery',      weight = 14000, stack = true, close = false, description = 'Charged and load-tested. The last thing you fit before it starts.' },
-    ['motor_oil']       = { grid = { 1, 1 }, label = 'Motor Oil',        weight = 1000,  stack = true, close = false, description = 'Five litres of the correct grade.' },
-    ['coolant']         = { grid = { 1, 1 }, label = 'Coolant',          weight = 1000,  stack = true, close = false, description = 'Pre-mixed. Bright enough to find on the floor when it leaks.' },
+    ['motor_oil']       = { grid = { 1, 1 }, label = 'Oleo de motor',    weight = 1000,  stack = true, close = false, description = 'Cinco litros, na viscosidade certa. Uma lata e uma troca inteira.' },
+    ['coolant']         = { grid = { 1, 1 }, label = 'Aditivo de radiador', weight = 1000,  stack = true, close = false, description = 'Ja diluido. Colorido o bastante pra voce achar no chao quando vazar.' },
 
     -- ---------------------------------------------------------------------------------------
     -- Electrical
@@ -2286,4 +2286,92 @@ return {
     -- ---------------------------------------------------------------------------------------
     ['seat_kit']        = { grid = { 3, 2 }, label = 'Seat Kit',         weight = 12000, stack = true, close = false, description = 'A retrimmed seat with new foam.' },
     ['trim_set']        = { grid = { 2, 2 }, label = 'Trim Set',         weight = 4000,  stack = true, close = false, description = 'Door cards, sills and pillar trims, with most of the clips.' },
+
+    -- >>> NEWCITY PESCARIA (gerado por tools/inventory-catalog/seed_pesca.py) >>>
+    -- 45 itens de pesca: 20 peixes, 20 filés, 2 varas e 3 iscas.
+    -- A FACA nao esta aqui: ela e a WEAPON_KNIFE (data/weapons.lua), porque
+    -- item comum nao vai pra mao e cortar exige ela EMPUNHADA.
+    -- O peso REAL do peixe vem de metadata.weight, gravado na captura.
+
+    -- Água salgada
+    ['sardinha'] = { grid = { 1, 1 }, label = 'Sardinha', rarity = 'common', weight = 175, stack = false, close = false, description = 'Tirado da agua salgada. Vale bem mais filetado do que inteiro.', client = { image = 'fish.png' } },
+    ['corvina'] = { grid = { 2, 1 }, label = 'Corvina', rarity = 'common', weight = 1450, stack = false, close = false, description = 'Tirado da agua salgada. Vale bem mais filetado do que inteiro.', client = { image = 'fish.png' } },
+    ['cavala'] = { grid = { 2, 2 }, label = 'Cavala', rarity = 'common', weight = 2150, stack = false, close = false, description = 'Tirado da agua salgada. Vale bem mais filetado do que inteiro.', client = { image = 'cavala.png' } },
+    ['robalo'] = { grid = { 2, 2 }, label = 'Robalo', rarity = 'common', weight = 2750, stack = false, close = false, description = 'Tirado da agua salgada. Vale bem mais filetado do que inteiro.', client = { image = 'robalo.png' } },
+    ['linguado'] = { grid = { 2, 2 }, label = 'Linguado', rarity = 'uncommon', weight = 3750, stack = false, close = false, description = 'Tirado da agua salgada. Vale bem mais filetado do que inteiro.', client = { image = 'linguado.png' } },
+    ['atum'] = { grid = { 3, 2 }, label = 'Atum', rarity = 'uncommon', weight = 7500, stack = false, close = false, description = 'Tirado da agua salgada. Vale bem mais filetado do que inteiro.', client = { image = 'atum.png' } },
+    ['dourado'] = { grid = { 2, 2 }, label = 'Dourado', rarity = 'rare', weight = 5000, stack = false, close = false, description = 'Tirado da agua salgada. Vale bem mais filetado do que inteiro.', client = { image = 'dourado.png' } },
+    ['marlim'] = { grid = { 4, 2 }, label = 'Marlim', rarity = 'rare', weight = 13500, stack = false, close = false, description = 'Tirado da agua salgada. Vale bem mais filetado do que inteiro.', client = { image = 'fish.png' } },
+    ['peixe_espada'] = { grid = { 3, 2 }, label = 'Peixe Espada', rarity = 'rare', weight = 11000, stack = false, close = false, description = 'Tirado da agua salgada. Vale bem mais filetado do que inteiro.', client = { image = 'fish.png' } },
+    ['garoupa_grande'] = { grid = { 4, 3 }, label = 'Garoupa Grande', rarity = 'epic', weight = 29000, stack = false, close = false, description = 'Tirado da agua salgada, e de pesca PROIBIDA. Carregar ja da problema.', client = { image = 'garoupa_grande.png' } },
+    ['tartaruga_marinha'] = { grid = { 4, 3 }, label = 'Tartaruga Marinha', rarity = 'epic', weight = 47500, stack = false, close = false, description = 'Tirado da agua salgada, e de pesca PROIBIDA. Carregar ja da problema.', client = { image = 'tartaruga_marinha.png' } },
+
+    -- Água doce
+    ['lambari'] = { grid = { 1, 1 }, label = 'Lambari', rarity = 'common', weight = 90, stack = false, close = false, description = 'Tirado da agua doce. Vale bem mais filetado do que inteiro.', client = { image = 'fish.png' } },
+    ['tilapia'] = { grid = { 2, 1 }, label = 'Tilápia', rarity = 'common', weight = 1150, stack = false, close = false, description = 'Tirado da agua doce. Vale bem mais filetado do que inteiro.', client = { image = 'tilapia.png' } },
+    ['bagre'] = { grid = { 2, 2 }, label = 'Bagre', rarity = 'common', weight = 2000, stack = false, close = false, description = 'Tirado da agua doce. Vale bem mais filetado do que inteiro.', client = { image = 'fish.png' } },
+    ['traira'] = { grid = { 2, 1 }, label = 'Traíra', rarity = 'common', weight = 1750, stack = false, close = false, description = 'Tirado da agua doce. Vale bem mais filetado do que inteiro.', client = { image = 'traira.png' } },
+    ['tucunare'] = { grid = { 2, 2 }, label = 'Tucunaré', rarity = 'uncommon', weight = 3000, stack = false, close = false, description = 'Tirado da agua doce. Vale bem mais filetado do que inteiro.', client = { image = 'tucunare.png' } },
+    ['pintado'] = { grid = { 3, 2 }, label = 'Pintado', rarity = 'rare', weight = 6000, stack = false, close = false, description = 'Tirado da agua doce. Vale bem mais filetado do que inteiro.', client = { image = 'pintado.png' } },
+    ['pirarucu'] = { grid = { 3, 2 }, label = 'Pirarucu', rarity = 'epic', weight = 12500, stack = false, close = false, description = 'Tirado da agua doce. Vale bem mais filetado do que inteiro.', client = { image = 'pirarucu.png' } },
+    ['jau'] = { grid = { 4, 2 }, label = 'Jaú', rarity = 'epic', weight = 24000, stack = false, close = false, description = 'Tirado da agua doce, e de pesca PROIBIDA. Carregar ja da problema.', client = { image = 'jau.png' } },
+    ['surubim'] = { grid = { 4, 2 }, label = 'Surubim', rarity = 'epic', weight = 17500, stack = false, close = false, description = 'Tirado da agua doce, e de pesca PROIBIDA. Carregar ja da problema.', client = { image = 'surubim.png' } },
+
+    -- Filés (o produto de verdade: valem muito mais que o peixe inteiro)
+    ['file_sardinha'] = { grid = { 1, 1 }, label = 'Filé de Sardinha', rarity = 'common', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'boarmeat.png' } },
+    ['file_corvina'] = { grid = { 1, 1 }, label = 'Filé de Corvina', rarity = 'common', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'boarmeat.png' } },
+    ['file_cavala'] = { grid = { 1, 1 }, label = 'Filé de Cavala', rarity = 'common', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'file_cavala.png' } },
+    ['file_robalo'] = { grid = { 1, 1 }, label = 'Filé de Robalo', rarity = 'common', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'file_robalo.png' } },
+    ['file_linguado'] = { grid = { 1, 1 }, label = 'Filé de Linguado', rarity = 'uncommon', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'file_linguado.png' } },
+    ['file_atum'] = { grid = { 1, 1 }, label = 'Filé de Atum', rarity = 'uncommon', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'file_atum.png' } },
+    ['file_dourado'] = { grid = { 1, 1 }, label = 'Filé de Dourado', rarity = 'rare', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'file_dourado.png' } },
+    ['file_marlim'] = { grid = { 1, 1 }, label = 'Filé de Marlim', rarity = 'rare', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'boarmeat.png' } },
+    ['file_peixe_espada'] = { grid = { 1, 1 }, label = 'Filé de Peixe Espada', rarity = 'rare', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'boarmeat.png' } },
+    ['file_garoupa_grande'] = { grid = { 1, 1 }, label = 'Filé de Garoupa Grande', rarity = 'epic', weight = 300, stack = true, close = false, description = 'File de pescado ILEGAL. Continua sendo crime depois de cortado.', client = { image = 'file_garoupa_grande.png' } },
+    ['file_tartaruga_marinha'] = { grid = { 1, 1 }, label = 'Filé de Tartaruga Marinha', rarity = 'epic', weight = 300, stack = true, close = false, description = 'File de pescado ILEGAL. Continua sendo crime depois de cortado.', client = { image = 'file_tartaruga_marinha.png' } },
+    ['file_lambari'] = { grid = { 1, 1 }, label = 'Filé de Lambari', rarity = 'common', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'boarmeat.png' } },
+    ['file_tilapia'] = { grid = { 1, 1 }, label = 'Filé de Tilápia', rarity = 'common', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'file_tilapia.png' } },
+    ['file_bagre'] = { grid = { 1, 1 }, label = 'Filé de Bagre', rarity = 'common', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'boarmeat.png' } },
+    ['file_traira'] = { grid = { 1, 1 }, label = 'Filé de Traíra', rarity = 'common', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'file_traira.png' } },
+    ['file_tucunare'] = { grid = { 1, 1 }, label = 'Filé de Tucunaré', rarity = 'uncommon', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'file_tucunare.png' } },
+    ['file_pintado'] = { grid = { 1, 1 }, label = 'Filé de Pintado', rarity = 'rare', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'file_pintado.png' } },
+    ['file_pirarucu'] = { grid = { 1, 1 }, label = 'Filé de Pirarucu', rarity = 'epic', weight = 300, stack = true, close = false, description = 'Posta limpa, pronta pra venda.', client = { image = 'file_pirarucu.png' } },
+    ['file_jau'] = { grid = { 1, 1 }, label = 'Filé de Jaú', rarity = 'epic', weight = 300, stack = true, close = false, description = 'File de pescado ILEGAL. Continua sendo crime depois de cortado.', client = { image = 'file_jau.png' } },
+    ['file_surubim'] = { grid = { 1, 1 }, label = 'Filé de Surubim', rarity = 'epic', weight = 300, stack = true, close = false, description = 'File de pescado ILEGAL. Continua sendo crime depois de cortado.', client = { image = 'file_surubim.png' } },
+
+    -- Equipamento de pesca. Gasta por USO e quem decrementa e o nc_job_fisher.
+    -- `consume = 0`: usar a vara NAO a destroi. `server.export`: usar no
+    -- inventario (ou no slot) e o que LANCA a linha.
+    ['vara_basica']   = { grid = { 3, 1 }, label = 'Vara de Pesca', rarity = 'common', weight = 1200, stack = false, close = true, consume = 0, description = 'Vara simples. Aguenta pouco esticao e cansa rapido.', client = { image = 'vara_basica.png' }, server = { export = 'nc_job_fisher.usarVara' } },
+    ['vara_master']   = { grid = { 3, 1 }, label = 'Vara Profissional', rarity = 'rare', weight = 1500, stack = false, close = true, consume = 0, description = 'Linha forte e recolhimento rapido. Perdoa erro na briga.', client = { image = 'vara_master.png' }, server = { export = 'nc_job_fisher.usarVara' } },
+
+    -- Iscas. Uma por lançamento, some mordendo ou não — é o ralo da pescaria (ECO-14).
+    ['isca_basica']   = { grid = { 1, 1 }, label = 'Isca Simples', rarity = 'common', weight = 50, stack = true, close = false, description = 'Minhoca e massa. Peixe morde, as vezes.', client = { image = 'isca_basica.png' } },
+    ['isca_premium']  = { grid = { 1, 1 }, label = 'Isca Premium', rarity = 'uncommon', weight = 50, stack = true, close = false, description = 'Atrai mais: mais mordida, mais peixe por hora.', client = { image = 'isca_premium.png' } },
+    ['isca_especial'] = { grid = { 1, 1 }, label = 'Isca Especial', rarity = 'rare', weight = 50, stack = true, close = false, description = 'Morde menos que a premium, mas puxa peixe melhor.', client = { image = 'isca_especial.png' } },
+    -- <<< NEWCITY PESCARIA <<<
+
+    -- >>> NEWCITY CRIME VEICULAR (ADR-0034 / CRI-15) >>>
+    -- As duas ferramentas do roubo de carro. A CHAVE MICHA nao esta aqui: ela ja
+    -- existe (`lockpick`, R$ 10 na Ferragens) e NAO vira item usavel — quem abre
+    -- o carro e o ALT nele (ox_target), com o nc_carjack conferindo a posse na
+    -- mochila e o servidor conferindo de novo antes de destrancar (CRI-15).
+    --
+    -- `consume = 0` nos dois, e isso TEM consequencia: item com consume = 0
+    -- NUNCA recebe o evento `usedItem`, so `usingItem`. O handler do nc_carjack
+    -- abre no `usingItem` — a armadilha ja mordeu o nc_phone e o nc_job_fisher.
+    --
+    -- Os dois so respondem DENTRO do carro da missao (CRI-16): o alicate no banco
+    -- do motorista, o scanner em qualquer banco com o alarme tocando. A pe, ou em
+    -- outro carro, usar nao faz nada — e quem decide isso e o SERVIDOR.
+    --
+    -- Nenhum dos dois entra em `shops.lua`: o Scanner OBD nao se vende em loja
+    -- nenhuma (e ferramenta de crime) e ONDE vender o alicate e decisao em aberto
+    -- do dono (`docs/20`, "Regras a definir"). Ate la, so pelo /admin.
+    --
+    -- Quebram ao falhar o minigame, com 50% de chance (CRI-13) — quem sorteia e
+    -- quem REMOVE e o servidor do nc_carjack, nunca o inventario.
+    ['alicate'] = { grid = { 1, 1 }, label = 'Alicate', rarity = 'common', weight = 400, stack = false, close = true, consume = 0, description = 'Bico fino, corte gasto. Descasca fio sem cortar, se a mao for boa.', client = { image = 'md_rustypliers.png' }, server = { export = 'nc_carjack.usarAlicate' } },
+    ['scanner_obd'] = { grid = { 2, 1 }, label = 'Scanner OBD', rarity = 'rare', weight = 600, stack = false, close = true, consume = 0, description = 'Le o barramento do carro pela porta de diagnostico. Quem anda com um nao e mecanico.', client = { image = 'radioscanner.png' }, server = { export = 'nc_carjack.usarScanner' } },
+    -- <<< NEWCITY CRIME VEICULAR <<<
 }

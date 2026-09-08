@@ -458,7 +458,9 @@ return {
 		},
 
 		['WEAPON_KNIFE'] = {
-			label = 'Knife',
+			-- Tambem e a faca de FILETAR: com ela NA MAO, ALT na bancada corta
+			-- o peixe (regra do dono, 06/09).
+			label = 'Faca',
 			rarity = 'uncommon',
 			grid = { 1, 2 },
 			weight = 300,
