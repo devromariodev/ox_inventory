@@ -31,6 +31,8 @@
   "ui_weight": "Weight",
   "ui_fastSlots": "Fast Slots",
   "ui_fastSlotsDescription": "Bound to the number keys for quick use.",
+  "ui_assignFastSlot": "Assign to fast slot",
+  "ui_clearFastSlot": "Clear fast slot",
   "ui_filter_all": "All",
   "ui_filter_weapons": "Weapons",
   "ui_filter_medical": "Medical",
