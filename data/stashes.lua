@@ -8,10 +8,10 @@ return {
 			heading = 0,
 			minZ = 29.49,
 			maxZ = 32.09,
-			label = 'Open personal locker'
+			label = 'Abrir o armário pessoal'
 		},
 		name = 'policelocker',
-		label = 'Personal locker',
+		label = 'Armário pessoal',
 		owner = true,
 		slots = 70,
 		weight = 70000,
@@ -27,10 +27,10 @@ return {
 			heading = 340,
 			minZ = 43.34,
 			maxZ = 44.74,
-			label = 'Open personal locker'
+			label = 'Abrir o armário pessoal'
 		},
 		name = 'emslocker',
-		label = 'Personal Locker',
+		label = 'Armário pessoal',
 		owner = true,
 		slots = 70,
 		weight = 70000,
