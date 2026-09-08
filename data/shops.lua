@@ -127,6 +127,33 @@ return {
 		}
 	},
 
+	-- >>> NEWCITY: ARSENAL DA POLICIA DESLIGADO >>>
+	-- Loja de demonstracao do upstream, no MESMO ponto do nosso armario
+	-- (451.51/-979.44/30.68), VENDENDO o equipamento da corporacao: pistola,
+	-- carabina, taser, cassetete, lanterna e municao.
+	--
+	-- POR QUE SAI (ADR-0013 §4, "desligar, nao neutralizar"): o armario da policia
+	-- ja tem dono nosso -- `nc_job_police` (`ARQ-18`) -- e o dele nao VENDE:
+	-- EMPRESTA (`EMP-17`). Cada item sai marcado com `metadata.corporacao =
+	-- 'police'`, o armario repoe em vez de empilhar, e sair de servico devolve tudo
+	-- que tem a marca. Esta loja entrega arma sem marca e sem devolucao -- e
+	-- exatamente o "bate o ponto, pega o fuzil, sai do ponto, vende" que o `EMP-17`
+	-- existe pra impedir.
+	--
+	-- E ela nao aparece pra ninguem HOJE, mas por ACIDENTE e nao por decisao: o
+	-- `groups` pergunta ao `PlayerData.job` do qbx_core, e o `nc_jobs` nunca escreve
+	-- la (`EMP-13`). Apagado por acidente e o oposto de desligado -- no dia em que
+	-- alguem construir a ponte `nc_jobs -> qbx`, ela volta sozinha, por cima do
+	-- nosso armario.
+	--
+	-- O `Medicine` logo abaixo FICA, de proposito: `ambulance` e conceito que ainda
+	-- NAO e nosso (`ARQ-18`, ultima linha -- hospital/paramedico e Marco 4), e o §4
+	-- do ADR-0013 so manda desligar o motor daquilo que a gente assumiu. Mesmo
+	-- motivo do `emslocker` em `data/stashes.lua`.
+	--
+	-- Fica comentada em vez de apagada porque o catalogo e a coordenada sao a unica
+	-- coisa que se perde -- se um dia a policia tiver loja de verdade, comeca daqui.
+	--[[
 	PoliceArmoury = {
 		name = 'Arsenal da Polícia',
 		groups = shared.police,
@@ -146,6 +173,8 @@ return {
 			{ loc = vec3(453.21, -980.03, 30.68), length = 0.5, width = 3.0, heading = 270.0, minZ = 30.5, maxZ = 32.0, distance = 6 }
 		}
 	},
+	]]
+	-- <<< NEWCITY: ARSENAL DA POLICIA DESLIGADO <<<
 
 	Medicine = {
 		name = 'Suprimentos Médicos',
